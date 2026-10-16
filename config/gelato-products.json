@@ -1,3 +1,14 @@
 {
-  "tshirt": { "templateIdEnv": "GELATO_TEMPLATE_TSHIRT", "placeholder": "ImageFront" }
+  "tshirt": {
+    "templateIdEnv": "GELATO_TEMPLATE_TSHIRT",
+    "placeholder": "ImageFront",
+    "descriptionDefaults": [
+      "Soft and comfortable heavyweight fabric",
+      "Durable double-stitching at the neckline and sleeves for increased resilience",
+      "Pre-shrunk for consistent fit post-wash",
+      "Taped neck and shoulders for added comfort and shape retention",
+      "Available in a wide range of colors to suit varied preferences"
+    ],
+    "titleSuffix": "Classic Kids Crewneck T-Shirt | Gildan® 5000B"
+  }
 }

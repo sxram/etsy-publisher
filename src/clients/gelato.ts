@@ -2,7 +2,7 @@ export interface GelatoProductInput { title: string; productTemplateId: string; 
 export interface GelatoClient { createProduct(input: GelatoProductInput): Promise<{ id: string }> }
 export interface GelatoTemplate {
   id: string;
-  variants: Array<{ id: string; imagePlaceholders: Array<{ name: string }> }>;
+  variants: Array<{ id: string; productUid?: string; variantOptions?: Array<{ name: string; value: string }>; imagePlaceholders: Array<{ name: string }> }>;
 }
 export interface GelatoPayload {
   templateId: string; title: string; description: string; tags: string[];

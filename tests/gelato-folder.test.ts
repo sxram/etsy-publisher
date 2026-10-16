@@ -1,9 +1,10 @@
+import sharp from 'sharp';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { parseProductText } from '../src/folder-input.js';
+import { appendDescriptionDefaults, makeProfileTitle, parseProductText } from '../src/folder-input.js';
 import { buildGelatoPayload } from '../src/clients/gelato.js';
 import { runFolder } from '../src/gelato-folder.js';
 import { signStorageUrl } from '../src/artwork-storage.js';
@@ -44,11 +45,19 @@ test('folder create/resume avoids duplicates and lost-response retries', async (
   globalThis.fetch = async (url, init) => {
     const address = String(url);
     if (address.includes('/templates/t1')) return Response.json(template);
-    if (address.startsWith('https://storage.example/')) return new Response(null, { status: 200 });
+    if (address.startsWith('https://storage.example/')) {
+      const uploaded = await sharp(Buffer.from(init?.body as Uint8Array)).metadata();
+      assert.equal(uploaded.format, 'png');
+      assert.ok(uploaded.hasAlpha);
+      return new Response(null, { status: 200 });
+    }
     if (address.endsWith('products:create-from-template')) {
       posts++;
       const body = JSON.parse(String(init?.body));
       assert.equal(body.isVisibleInTheOnlineStore, false);
+      assert.equal(body.title, 'Moon Fox | Woodland Art | Classic Kids Crewneck T-Shirt | Gildan® 5000B');
+      assert.match(body.description, /A whimsical fox design\.\n\n- Soft and comfortable heavyweight fabric/);
+      assert.match(body.description, /Available in a wide range of colors/);
       if (fail) throw new TypeError('fetch failed');
       return Response.json({ id: 'p1', status: 'created' });
     }
@@ -56,7 +65,7 @@ test('folder create/resume avoids duplicates and lost-response retries', async (
     throw new Error('Unexpected request');
   };
   try {
-    await writeFile(join(dir, 'image.png'), Buffer.from([137,80,78,71,13,10,26,10]));
+    await sharp({ create: { width: 4800, height: 1, channels: 4, background: 'red' } }).png().toFile(join(dir, 'image.png'));
     await writeFile(join(dir, 'description.md'), text);
     await runFolder(['create', '--dir', dir]);
     assert.equal(posts, 1);
@@ -75,4 +84,52 @@ test('folder create/resume avoids duplicates and lost-response retries', async (
     await assert.rejects(runFolder(['resume', '--dir', dir]), /Ungewisser/);
     assert.equal(posts, 2);
   } finally { globalThis.fetch = originalFetch; process.env = originalEnv; await rm(dir, { recursive: true, force: true }); }
+});
+
+test('multiline tags accept plain lines, wrapped comma lists and list items', () => {
+  const cases = [
+    '**Tags**\nfox shirt\nwoodland gift\nmoon art',
+    'Tags: fox shirt,\nwoodland gift, moon art',
+    '**Tags**\n- fox shirt\n- woodland gift\n- moon art',
+    '**Tags**\n1. fox shirt\n2. woodland gift\n3. moon art',
+  ];
+  for (const block of cases) {
+    const result = parseProductText(`Title: Moon Fox\n\n${block}\n\n**Description**\nA whimsical fox design.`);
+    assert.deepEqual(result.tags, ['fox shirt', 'woodland gift', 'moon art']);
+    assert.equal(result.description, 'A whimsical fox design.');
+  }
+  const adjacent = parseProductText('Title: Fox\nTags: fox shirt\nwoodland gift\nDescription:\nA whimsical fox design.');
+  assert.deepEqual(adjacent.tags, ['fox shirt', 'woodland gift']);
+  assert.equal(adjacent.description, 'A whimsical fox design.');
+});
+
+test('description defaults append only missing points and preserve original text', () => {
+  const points = ['Soft and comfortable heavyweight fabric', 'Pre-shrunk for consistent fit post-wash'];
+  const original = 'My design.\n\n- **Soft and comfortable heavyweight fabric.**';
+  const result = appendDescriptionDefaults(original, points);
+  assert.equal(result, original + '\n\n- Pre-shrunk for consistent fit post-wash');
+  assert.equal(appendDescriptionDefaults(result, points), result);
+  assert.equal(appendDescriptionDefaults('My design.'), 'My design.');
+});
+
+test('profile title retains motif and model, avoids duplicate suffix and fits Etsy limit', () => {
+  const suffix = 'Classic Kids Crewneck T-Shirt | Gildan® 5000B';
+  const title = makeProfileTitle('Moon Fox', suffix);
+  assert.equal(title, 'Moon Fox | ' + suffix);
+  assert.equal(makeProfileTitle(title, suffix), title);
+  const long = makeProfileTitle('Dreamy Woodland Fox '.repeat(7).trim(), suffix);
+  assert.ok(long.length <= 140);
+  assert.ok(long.endsWith('Kids Crewneck T-Shirt | Gildan® 5000B'));
+  assert.ok(!long.includes('Classic'));
+  assert.equal(makeProfileTitle('Moon Fox'), 'Moon Fox');
+  const partial = makeProfileTitle('Moon Fox | Gildan® 5000B', suffix);
+  assert.equal(partial.match(/5000B/g)?.length, 1);
+});
+
+test('all template variants are retained regardless of color', () => {
+  const t = { id: 't', variants: [
+    { id: 'white', imagePlaceholders: [{ name: 'ImageFront' }] },
+    { id: 'black', imagePlaceholders: [{ name: 'ImageFront' }] },
+  ] };
+  assert.deepEqual(buildGelatoPayload(t, parseProductText(text), 'https://example.com/art.png', 'ImageFront').variants.map(v => v.templateVariantId), ['white', 'black']);
 });

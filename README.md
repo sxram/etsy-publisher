@@ -185,7 +185,7 @@ Hosting-Umgebung.
 
 ## Gelato: Produkt aus einem Ordner erstellen
 
-Der neue Kommandozeilen-Ablauf arbeitet unabhängig vom MCP-Server. Im Eingabeordner muss genau ein Bild (`.jpg`, `.jpeg`, `.png`) und genau eine Beschreibung (`.txt`, `.md`) liegen. Die Dateinamen dürfen unterschiedlich sein; Unterordner werden ignoriert. Das Bild wird als Druckmotiv hochgeladen, ohne Skalierung, Hintergrundentfernung oder Poster-spezifische Zusätze. Für Kleidung möglichst eine ausreichend große PNG mit transparentem Hintergrund verwenden. Die Auflösung muss für die in der Vorlage konfigurierte Druckfläche geeignet sein.
+Der neue Kommandozeilen-Ablauf arbeitet unabhängig vom MCP-Server. Im Eingabeordner muss genau ein Bild (`.jpg`, `.jpeg`, `.png`) und genau eine Beschreibung (`.txt`, `.md`) liegen. Die Dateinamen dürfen unterschiedlich sein; Unterordner werden ignoriert. Das Motiv wird ohne automatische Weißentfernung als PNG mit bis zu 3800 Pixeln an der längsten Kante und 300 dpi vorbereitet. Seitenverhältnis und vorhandene Transparenz bleiben erhalten. Für Kleidung möglichst eine ausreichend große PNG mit transparentem Hintergrund verwenden. Die Auflösung muss für die in der Vorlage konfigurierte Druckfläche geeignet sein.
 
 ```md
 **Title**
@@ -223,3 +223,20 @@ Der API-Aufruf setzt `isVisibleInTheOnlineStore: false`. Bei einem verbundenen E
 Die endgültige Mehrprodukt-Zusammenstellung ist noch offen. In `config/gelato-products.json` ist zunächst nur `tshirt` enthalten. Longsleeve und Kapuzenjacke können nach Auswahl der konkreten Produkte als weitere Profile mit eigener Template-ID ergänzt werden. `--products tshirt,longsleeve,ziphoodie` erstellt dann je konfiguriertem Profil ein eigenes Gelato-Produkt; das ist kein einzelner Etsy-Artikel mit gemischten Produkttypen. Ein gemeinsamer Mehrprodukt-Artikel ist noch nicht implementiert.
 
 API-Grundlagen: [Produkt aus Vorlage](https://dashboard.gelato.com/docs/ecommerce/products/create-from-template/), [Vorlage auslesen](https://dashboard.gelato.com/docs/ecommerce/templates/get/), [Gelato zu Etsy](https://support.gelato.com/en/articles/8996452-how-do-i-add-gelato-products-to-my-etsy-store).
+
+Tags können über mehrere zusammenhängende Zeilen stehen: ein Tag pro Zeile, Komma-/Semikolonlisten mit Zeilenumbrüchen oder Markdown-Listen (auch nummeriert). Das gilt auch nach `Tags: erster tag`. Den Tag-Block mit einer Leerzeile oder einer Überschrift wie `**Description**` beenden, damit nachfolgender Beschreibungstext getrennt bleibt. Alle erkannten Tag-Zeilen werden aus der Artikelbeschreibung entfernt. Die Grenze von 13 Tags mit jeweils 20 Zeichen bleibt bestehen.
+
+Das T-Shirt-Profil ergänzt die fünf Standardangaben zu Stoff, Nähten, Einlaufen, Nacken-/Schulterband und Farben aus `descriptionDefaults` in `config/gelato-products.json`. Die Ergänzung ist in der Vorschau je Profil sichtbar und wird bei neuen Produkten an die Motivbeschreibung angehängt. Bereits enthaltene Formulierungen werden unter Berücksichtigung von Groß-/Kleinschreibung und Markdown nicht doppelt hinzugefügt. Bestehende Gelato-Produkte werden dadurch nicht nachträglich geändert. Andere Produktprofile erhalten diese T-Shirt-Angaben nur, wenn sie dort ausdrücklich hinterlegt sind.
+
+Das Profil `tshirt` ist für das Kinder-T-Shirt Gildan 5000B vorgesehen und ergänzt den Motivtitel um `Classic Kids Crewneck T-Shirt | Gildan® 5000B`. Die konfigurierte Gelato-Vorlage muss zu diesem Produkt gehören. Der endgültige Titel wird in der Vorschau je Profil angezeigt. Bereits als Titelteile vorhandene Zusätze werden nicht doppelt angehängt. Bei Platzmangel entfällt zuerst `Classic`, anschließend wird der Motivteil an einer Wortgrenze gekürzt, um maximal 140 Zeichen einzuhalten. Der Modellname bleibt erhalten. Der Zusatz ist als `titleSuffix` in `config/gelato-products.json` anpassbar.
+
+
+
+Die Bildvorbereitung erzeugt `out/gelato/artwork-prepared.png`. Die Form-Erkennung bleibt als Heuristik aktiv; alle Farben und Varianten der Vorlage sind unabhängig davon verfügbar. Es findet keine Weißentfernung und kein Zuschnitt statt. Bei nicht rechteckigen Motiven wird ein englischer Hinweis auf den sichtbaren Druck des weißen Hintergrunds/Rands auf farbigen T-Shirts ergänzt. Die Originalränder bleiben erhalten.
+
+Gelatos effektive Druckauflösung hängt von Pixelzahl und belegter Druckfläche ab. 300 dpi in den Dateimetadaten garantiert keine effektiven 300 dpi in Gelato; dafür gegebenenfalls die Druckfläche in der Vorlage verkleinern oder eine höher aufgelöste Quelldatei verwenden.
+
+Kleinere Bilder werden mit Lanczos3 auf 3800 Pixel an der längsten Kante hochskaliert und leicht geschärft. Größere Bilder werden entsprechend verkleinert. Dieselbe Vorbereitung gilt für Vorschau und Upload. 3800 Pixel entsprechen bei 300 dpi rund 28,8 cm; die effektive Auflösung hängt weiterhin von der Gelato-Druckposition ab. Hochskalierung interpoliert vorhandene Bildinformationen und erzeugt keine neuen Originaldetails.
+
+
+Die aktuelle Vorbereitung zielt auf 3800 Pixel an der längsten Kante und maximal 10.000.000 Bytes pro PNG. Zuerst wird verlustfreie PNG-Komprimierung verwendet. Nur falls nötig folgt eine Reduktion auf maximal 256 Farben; falls weiterhin zu groß, wird die Pixelgröße schrittweise reduziert. Die tatsächlich erzeugten Maße und Dateigröße stehen in der Vorschau. Original und bestehende Transparenz bleiben erhalten. Die Farbquantisierung kann feine Farbverläufe verändern.

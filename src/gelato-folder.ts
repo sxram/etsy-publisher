@@ -2,11 +2,12 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { readProductFolder } from './folder-input.js';
+import { appendDescriptionDefaults, makeProfileTitle, readProductFolder } from './folder-input.js';
 import { GelatoApiClient, buildGelatoPayload } from './clients/gelato.js';
+import { analyzeArtwork, prepareArtwork, WHITE_PRINT_NOTICE } from './prepare-artwork.js';
 import { storageConfig, uploadArtwork } from './artwork-storage.js';
 
-interface Profile { templateIdEnv: string; placeholder: string }
+interface Profile { templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string }
 interface Entry { profile: string; templateId: string; placeholder: string; status: string; productId?: string; externalId?: string | null }
 interface State { fingerprint: string; storeId: string; entries: Entry[] }
 async function optionalState(path: string): Promise<State | undefined> {
@@ -21,6 +22,7 @@ export async function runFolder(args = process.argv.slice(2)) {
   if (!folder) throw new Error('--dir mit einem Eingabeordner ist erforderlich.');
   const dir = resolve(folder);
   const input = await readProductFolder(dir);
+  const artwork = await analyzeArtwork(input.image);
   const profiles = JSON.parse(await readFile(resolve('config/gelato-products.json'), 'utf8')) as Record<string, Profile>;
   const selected = [...new Set((option('--products') || 'tshirt').split(',').map(x => x.trim()).filter(Boolean))];
   if (!selected.length) throw new Error('Mindestens ein Produktprofil erforderlich.');
@@ -29,14 +31,17 @@ export async function runFolder(args = process.argv.slice(2)) {
     if (!p?.templateIdEnv || !p.placeholder) throw new Error(`Produktprofil ${name} fehlt oder ist unvollständig.`);
     return { profile: name, templateId: process.env[p.templateIdEnv]?.trim() || '', placeholder: p.placeholder, status: 'planned' };
   });
+  const metadataFor = (profile: string) => ({ ...input.metadata, title: makeProfileTitle(input.metadata.title, profiles[profile]!.titleSuffix), description: appendDescriptionDefaults(input.metadata.description, [...(profiles[profile]!.descriptionDefaults ?? []), ...(!artwork.rectangular ? [WHITE_PRINT_NOTICE] : [])]) });
   const out = join(dir, 'out', 'gelato');
   await mkdir(out, { recursive: true });
+  const preparedImage = join(out, 'artwork-prepared.png');
   const statePath = join(out, 'state.json');
   const storeId = process.env.GELATO_STORE_ID?.trim() || '';
-  const fingerprint = createHash('sha256').update(input.bytes).update(JSON.stringify({ metadata: input.metadata, storeId, entries: entries.map(({ profile, templateId, placeholder }) => ({ profile, templateId, placeholder })) })).digest('hex');
+  const fingerprint = createHash('sha256').update(input.bytes).update(JSON.stringify({ metadata: input.metadata, artworkProcessing: 'all-colors-no-crop-white-notice-long3800-max10mb-v9', storeId, entries: entries.map(({ profile, templateId, placeholder }) => ({ profile, templateId, placeholder, title: metadataFor(profile).title, description: metadataFor(profile).description })) })).digest('hex');
   const previous = await optionalState(statePath);
   if (command === 'preview') {
-    const plan = { ...input.metadata, image: input.image, profiles: entries, visibility: 'hidden / Etsy draft requested', missingConfiguration: [...(!storeId ? ['GELATO_STORE_ID'] : []), ...entries.filter(e => !e.templateId).map(e => profiles[e.profile]!.templateIdEnv)] };
+    Object.assign(artwork, await prepareArtwork(input.image, preparedImage));
+    const plan = { ...input.metadata, image: preparedImage, originalImage: input.image, artwork, profiles: entries.map(entry => ({ ...entry, title: metadataFor(entry.profile).title, description: metadataFor(entry.profile).description })), visibility: 'hidden / Etsy draft requested', missingConfiguration: [...(!storeId ? ['GELATO_STORE_ID'] : []), ...entries.filter(e => !e.templateId).map(e => profiles[e.profile]!.templateIdEnv)] };
     await writeFile(join(out, 'preview.json'), JSON.stringify(plan, null, 2) + '\n');
     console.log(JSON.stringify(plan, null, 2));
     console.log('Nur lokale Vorschau. Kein Gelato-Produkt angelegt.');
@@ -45,7 +50,8 @@ export async function runFolder(args = process.argv.slice(2)) {
   if (command === 'create' && previous) throw new Error('Ein früherer Auftrag ist gespeichert. gelato:resume verwenden; keine doppelte Erstellung.');
   if (command === 'resume' && !previous) throw new Error('Kein Auftrag zum Fortsetzen gefunden.');
   if (previous && (previous.fingerprint !== fingerprint || previous.storeId !== storeId)) throw new Error('Eingabe oder Konfiguration seit Erstellung geändert. Bestehenden Auftrag zuerst prüfen.');
-  if (!storeId || entries.some(e => !e.templateId)) throw new Error('GELATO_STORE_ID oder Template-ID fehlt. .env und config/gelato-products.json einrichten.');
+  const missing = [...(!storeId ? ['GELATO_STORE_ID'] : []), ...entries.filter(e => !e.templateId).map(e => profiles[e.profile]!.templateIdEnv)];
+  if (missing.length) throw new Error(`Fehlende Einstellung(en) in .env: ${missing.join(', ')}. Die Template-ID findest du in Gelato unter Vorlagen/Templates.`);
   const client = new GelatoApiClient(process.env.GELATO_API_KEY?.trim() || '', storeId);
   const state = previous ?? { fingerprint, storeId, entries };
   const save = async () => { await writeFile(`${statePath}.tmp`, JSON.stringify(state, null, 2) + '\n'); await rename(`${statePath}.tmp`, statePath); };
@@ -58,7 +64,7 @@ export async function runFolder(args = process.argv.slice(2)) {
     for (const entry of pending) {
       const template = await client.getTemplate(entry.templateId);
       if (template.id !== entry.templateId) throw new Error('Gelato hat eine unerwartete Vorlage zurückgegeben.');
-      buildGelatoPayload(template, input.metadata, 'https://example.invalid/preflight.png', entry.placeholder);
+      buildGelatoPayload(template, metadataFor(entry.profile), 'https://example.invalid/preflight.png', entry.placeholder);
       templates.set(entry.profile, template);
     }
   }
@@ -69,12 +75,13 @@ export async function runFolder(args = process.argv.slice(2)) {
   try {
     const latest = await optionalState(statePath);
     if (JSON.stringify(latest) !== JSON.stringify(previous)) throw new Error('Auftragsstatus inzwischen geändert. Erneut aufrufen.');
-    const artworkUrl = pending.length ? await uploadArtwork(input.image) : undefined;
+    if (pending.length) await prepareArtwork(input.image, preparedImage);
+    const artworkUrl = pending.length ? await uploadArtwork(preparedImage) : undefined;
     if (!previous) await save();
     for (const entry of state.entries) {
       if (!entry.productId) {
         entry.status = 'creating'; await save();
-        const result = await client.createFromTemplate(buildGelatoPayload(templates.get(entry.profile)!, input.metadata, artworkUrl!, entry.placeholder));
+        const result = await client.createFromTemplate(buildGelatoPayload(templates.get(entry.profile)!, metadataFor(entry.profile), artworkUrl!, entry.placeholder));
         if (!result.id) throw new Error('Gelato-Antwort ohne Produkt-ID. Auftrag im Dashboard prüfen.');
         entry.productId = result.id; entry.status = result.status; entry.externalId = result.externalId; await save();
       }

@@ -11,17 +11,28 @@ export function parseProductText(text: string) {
     if (index < 0) return undefined;
     used.add(index);
     const inline = heading.exec(clean(lines[index]!))?.[2]?.trim();
+    if (names.test('tags')) {
+      const values: string[] = inline ? [inline] : [];
+      let next = index + 1;
+      if (!inline) while (next < lines.length && !lines[next]!.trim()) next++;
+      while (next < lines.length) {
+        const line = lines[next]!.trim();
+        if (!line || heading.test(clean(line)) || /^#{1,6}\s+/.test(line) || /^\*\*[^*]+\*\*:?$/.test(line)) break;
+        // A prose sentence after inline tags belongs to the description.
+        if (/[.!?]$/.test(line)) break;
+        used.add(next);
+        values.push(line.replace(/^(?:[-*•]|\d+[.)])\s+/, ''));
+        next++;
+      }
+      if (!values.length) throw new Error(`Inhalt nach ${clean(lines[index]!)} fehlt.`);
+      return values.join(', ');
+    }
     if (inline) return inline;
     let next = index + 1;
     while (next < lines.length && !lines[next]!.trim()) next++;
     if (next >= lines.length || heading.test(clean(lines[next]!))) throw new Error(`Inhalt nach ${clean(lines[index]!)} fehlt.`);
     used.add(next);
     const values = [lines[next]!.trim().replace(/^[-*•]\s+/, '')];
-    if (names.test('tags')) {
-      while (next + 1 < lines.length && /^\s*[-*•]\s+/.test(lines[next + 1]!)) {
-        used.add(++next); values.push(lines[next]!.trim().replace(/^[-*•]\s+/, ''));
-      }
-    }
     return values.join(', ');
   }
   const titleField = field(/^(title|titel)$/i);
@@ -46,4 +57,37 @@ export async function readProductFolder(dir: string) {
   const jpg = bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
   if (/\.png$/i.test(image) ? !png : !jpg) throw new Error('Bildinhalt passt nicht zur JPG/PNG-Dateiendung.');
   return { image, bytes, metadata: parseProductText(await readFile(join(dir, texts[0]!.name), 'utf8')) };
+}
+
+export function appendDescriptionDefaults(description: string, defaults: string[] = []): string {
+  const normalize = (value: string) => value.normalize('NFKC').toLowerCase()
+    .replace(/[*_`]/g, '').replace(/[‐‑–—]/g, '-').replace(/\s+/g, ' ').trim().replace(/[.!?]+$/, '');
+  const existing = normalize(description);
+  const seen = new Set<string>();
+  const missing = defaults.map(point => point.trim()).filter(point => {
+    const key = normalize(point);
+    if (!key || seen.has(key) || existing.includes(key)) return false;
+    seen.add(key); return true;
+  });
+  return missing.length ? `${description.trimEnd()}\n\n${missing.map(point => `- ${point}`).join('\n')}` : description;
+}
+
+export function makeProfileTitle(source: string, suffix = ''): string {
+  if (!suffix.trim()) return source;
+  const normalize = (value: string) => value.toLowerCase().replace(/[®™]/g, '').replace(/\s+/g, ' ').trim();
+  const parts = suffix.split('|').map(part => part.trim()).filter(Boolean);
+  const sourceParts = source.split('|').map(part => part.trim()).filter(Boolean);
+  const productKeys = new Set(parts.flatMap(part => [normalize(part), normalize(part.replace(/^Classic\s+/i, ''))]));
+  const motif = sourceParts.filter(part => !productKeys.has(normalize(part))).join(' | ');
+  let product = parts.join(' | ');
+  if (`${motif} | ${product}`.length > 140) product = product.replace(/^Classic\s+/i, '');
+  const room = 140 - product.length - 3;
+  if (room < 1) throw new Error('Produkt-Titelzusatz ist zu lang.');
+  let clipped = motif;
+  if (clipped.length > room) {
+    clipped = clipped.slice(0, room + 1);
+    const space = clipped.lastIndexOf(' ');
+    clipped = (space > 0 ? clipped.slice(0, space) : clipped.slice(0, room)).replace(/[|\s]+$/, '');
+  }
+  return clipped ? `${clipped} | ${product}` : product;
 }
