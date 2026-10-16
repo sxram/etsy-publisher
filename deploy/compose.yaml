@@ -1,0 +1,26 @@
+services:
+  publisher:
+    build: ..
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      ALLOWED_HOSTS: ${MCP_DOMAIN:?Set MCP_DOMAIN},127.0.0.1
+      ALLOWED_ORIGINS: https://chatgpt.com
+    expose:
+      - "3000"
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      MCP_DOMAIN: ${MCP_DOMAIN:?Set MCP_DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+volumes:
+  caddy_data:
+  caddy_config:
