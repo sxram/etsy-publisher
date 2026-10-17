@@ -240,3 +240,21 @@ Kleinere Bilder werden mit Lanczos3 auf 3800 Pixel an der längsten Kante hochsk
 
 
 Die aktuelle Vorbereitung zielt auf 3800 Pixel an der längsten Kante und maximal 10.000.000 Bytes pro PNG. Zuerst wird verlustfreie PNG-Komprimierung verwendet. Nur falls nötig folgt eine Reduktion auf maximal 256 Farben; falls weiterhin zu groß, wird die Pixelgröße schrittweise reduziert. Die tatsächlich erzeugten Maße und Dateigröße stehen in der Vorschau. Original und bestehende Transparenz bleiben erhalten. Die Farbquantisierung kann feine Farbverläufe verändern.
+
+
+## Dropbox als Bildspeicher
+
+In `.env` `GELATO_STORAGE_PROVIDER=dropbox` und `DROPBOX_APP_KEY` aus der Dropbox App Console setzen. `GELATO_S3_*` wird dann nicht benötigt. Die App mit App-folder-Zugriff benötigt `files.content.write`, `files.content.read`, `sharing.write` und `sharing.read`. Ein App secret wird nicht benötigt.
+
+Einmalig `npm run dropbox:connect` starten, den ausgegebenen Link öffnen, den Zugriff bestätigen und den auf Dropbox angezeigten Autorisierungscode im wartenden Terminal eingeben. Kein Redirect-URI-Eintrag erforderlich. Das Script verwendet PKCE und Offline-Zugriff; die Zugangsdaten werden mit Dateirechten 600 in `.private/dropbox-tokens.json` gespeichert und automatisch erneuert. Keine Codes/Token im Chat oder in Git ablegen.
+
+Danach gelten unverändert `gelato:preview`, `gelato:create` und `gelato:resume`. Bei Erstellung lädt das Script die vorbereitete PNG in den Dropbox-App-Ordner und erstellt einen öffentlichen Freigabelink mit direktem Bildabruf. Wer den Link kennt, kann das Bild herunterladen. Der Link wird nicht in Vorschau/Statusdatei protokolliert. Vorhandene Freigaben werden wiederverwendet. Dateien werden nach ihrem Inhalt benannt und bleiben für Gelatos asynchrone Verarbeitung verfügbar. Nicht vorzeitig löschen; es gibt derzeit keine automatische Bereinigung. Der echte Gelato-Abruf via Dropbox muss beim ersten Produkt geprüft werden.
+
+Für die Etsy-Übertragung wird das Größen-/Farbraster vor dem Upload geprüft. Alle Vorlagenfarben bleiben erhalten; Größen, die nicht in jeder Farbe vorhanden sind, werden weggelassen und im Terminal genannt. Die aktuelle Gildan-Vorlage enthält deshalb S, M, L und XL in 18 Farben (72 Kombinationen), ohne XS. Andere Dimensionen oder doppelte Kombinationen werden zur Prüfung angehalten.
+
+Dropbox-Downloads werden jetzt über `dl.dropboxusercontent.com` direkt ohne Weiterleitung übergeben. Vor dem Gelato-POST lädt das Script die öffentliche URL ohne Zugangsdaten und ohne Redirect-Erlaubnis herunter und prüft PNG-Content-Type sowie bytegenaue Übereinstimmung mit der lokalen Druckdatei. Ein erfolgreicher Downloadtest bestätigt die Abrufbarkeit vom ausführenden Rechner, nicht die spätere Verarbeitung durch Gelato.
+
+Nach Rückgabe einer Etsy-ID kann der Publisher die eigene Entwurfsbeschreibung mit Leerzeilen setzen und die Kategorie aus `etsyTaxonomyId` korrigieren (Kinder-T-Shirts: 11170). Dazu `ETSY_ENABLED=true` und einmalig `npm run etsy:connect` mit `listings_w` bestätigen. Bereits veröffentlichte Artikel werden nicht automatisch geändert. Existiert genau ein Etsy-Produktionspartner namens Gelato, wird dieser unter Erhalt bestehender Partnerzuordnungen ergänzt. Andernfalls ist die einmalige Anlage/Prüfung im Etsy-Editor erforderlich. Die Herstellungsweise und GPSR-Felder bleiben manuelle Prüfpunkte, da dafür keine dokumentierten öffentlichen API-Felder vorliegen. Die lokal unter `.private/product-contact.json` gespeicherten Shop-Kontaktdaten sind keine Hersteller-/Sicherheitsdeklaration.
+Gelato erhält die Beschreibung künftig mit HTML-Absätzen und `<br>`-Umbrüchen; Etsy erhält für die direkte Nachbearbeitung Klartext mit Leerzeilen. Bestehende Gelato-Produktbeschreibungen werden damit nicht rückwirkend aktualisiert.
+
+Das T-Shirt-Profil ordnet eigene Etsy-Entwürfe bei der Nachbearbeitung der Shop-Abteilung `Kids T-Shirts` zu (`etsySection` im Produktprofil). Die Abteilung muss bereits im Shop existieren; fehlt sie, wird dies vor der Änderung gemeldet.

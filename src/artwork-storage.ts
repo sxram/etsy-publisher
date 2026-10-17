@@ -1,3 +1,4 @@
+import { uploadDropbox, validateDropbox } from './dropbox-storage.js';
 import { createHash, createHmac } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { extname } from 'node:path';
@@ -26,7 +27,15 @@ export function signStorageUrl(config: ReturnType<typeof storageConfig>, method:
   url.search = `${query}&X-Amz-Signature=${signature}`;
   return url.toString();
 }
+export async function validateStorage() {
+  const provider = process.env.GELATO_STORAGE_PROVIDER?.trim() || 's3';
+  if (provider === 'dropbox') await validateDropbox();
+  else if (provider === 's3') storageConfig();
+  else throw new Error('GELATO_STORAGE_PROVIDER muss s3 oder dropbox sein.');
+}
 export async function uploadArtwork(path: string) {
+  await validateStorage();
+  if (process.env.GELATO_STORAGE_PROVIDER?.trim() === 'dropbox') return uploadDropbox(path);
   const config = storageConfig();
   const bytes = await readFile(path);
   const key = `giggle-publisher/${hash(bytes)}${extname(path).toLowerCase()}`;

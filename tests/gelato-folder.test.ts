@@ -5,12 +5,12 @@ import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { appendDescriptionDefaults, makeProfileTitle, parseProductText } from '../src/folder-input.js';
-import { buildGelatoPayload } from '../src/clients/gelato.js';
+import { buildGelatoPayload, completeEtsySizeGrid } from '../src/clients/gelato.js';
 import { runFolder } from '../src/gelato-folder.js';
 import { signStorageUrl } from '../src/artwork-storage.js';
 
 const text = '**Title**\nMoon Fox, Woodland Art\n\n**Tags**\nfox shirt, woodland gift\n\n**Description**\nA whimsical fox design.';
-const template = { id: 't1', variants: [{ id: 'v1', imagePlaceholders: [{ name: 'ImageFront' }] }, { id: 'v2', imagePlaceholders: [{ name: 'ImageFront' }] }] };
+const template = { id: 't1', variants: [{ id: 'v1', imagePlaceholders: [{ name: 'artwork-prepared.png' }] }, { id: 'v2', imagePlaceholders: [{ name: 'artwork-prepared.png' }] }] };
 test('metadata accepts inline and Markdown fields without digital product additions', () => {
   const result = parseProductText(text);
   assert.equal(result.title, 'Moon Fox | Woodland Art');
@@ -21,7 +21,7 @@ test('metadata accepts inline and Markdown fields without digital product additi
   assert.throws(() => parseProductText('Title: Fox\nTags: this tag is much too long to use\nDescription.'), /Tags/);
 });
 test('template payload includes all variants, hidden visibility and non-cropping artwork', () => {
-  const payload = buildGelatoPayload(template, parseProductText(text), 'https://art.example/image.png', 'ImageFront');
+  const payload = buildGelatoPayload(template, parseProductText(text), 'https://art.example/image.png', 'artwork-prepared.png');
   assert.equal(payload.isVisibleInTheOnlineStore, false);
   assert.equal(payload.variants.length, 2);
   assert.equal(payload.variants[1]?.imagePlaceholders[0]?.fitMethod, 'meet');
@@ -56,7 +56,7 @@ test('folder create/resume avoids duplicates and lost-response retries', async (
       const body = JSON.parse(String(init?.body));
       assert.equal(body.isVisibleInTheOnlineStore, false);
       assert.equal(body.title, 'Moon Fox | Woodland Art | Classic Kids Crewneck T-Shirt | Gildan® 5000B');
-      assert.match(body.description, /A whimsical fox design\.\n\n- Soft and comfortable heavyweight fabric/);
+      assert.match(body.description, /<p>A whimsical fox design\.<\/p>\n<p>- Soft and comfortable heavyweight fabric/);
       assert.match(body.description, /Available in a wide range of colors/);
       if (fail) throw new TypeError('fetch failed');
       return Response.json({ id: 'p1', status: 'created' });
@@ -132,4 +132,17 @@ test('all template variants are retained regardless of color', () => {
     { id: 'black', imagePlaceholders: [{ name: 'ImageFront' }] },
   ] };
   assert.deepEqual(buildGelatoPayload(t, parseProductText(text), 'https://example.com/art.png', 'ImageFront').variants.map(v => v.templateVariantId), ['white', 'black']);
+});
+
+test('Etsy grid keeps all colors and omits sizes absent in some colors', () => {
+  const variants = [['White','XS'],['White','S'],['White','M'],['Black','S'],['Black','M']].map(([color,size],i) => ({ id: String(i), variantOptions: [{name:'Color',value:color!},{name:'Size',value:size!}], imagePlaceholders: [] }));
+  const selected = completeEtsySizeGrid({ id:'t', variants });
+  assert.deepEqual(selected.removedSizes,['XS']); assert.equal(selected.template.variants.length,4);
+  assert.equal(completeEtsySizeGrid(selected.template).removedSizes.length,0);
+});
+
+test('Gelato descriptions use escaped HTML paragraphs and line breaks', async () => {
+  const { toGelatoHtml } = await import('../src/folder-input.js');
+  assert.equal(toGelatoHtml('First paragraph.\n\n**Details**\n- Cotton & comfort'), '<p>First paragraph.</p>\n<p><strong>Details</strong><br>- Cotton &amp; comfort</p>');
+  assert.equal(toGelatoHtml('<script>x</script>'), '<p>&lt;script&gt;x&lt;/script&gt;</p>');
 });

@@ -91,3 +91,8 @@ export function makeProfileTitle(source: string, suffix = ''): string {
   }
   return clipped ? `${clipped} | ${product}` : product;
 }
+
+export function toGelatoHtml(text: string): string {
+  const escape = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return text.trim().split(/\r?\n\s*\r?\n/).map(paragraph => `<p>${escape(paragraph).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\r?\n/g, '<br>')}</p>`).join('\n');
+}

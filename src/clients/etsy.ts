@@ -11,7 +11,7 @@ export function beginAuthorization(config: EtsyConfig) {
   const state = randomBytes(32).toString('base64url');
   const verifier = randomBytes(32).toString('base64url');
   const url = new URL('https://www.etsy.com/oauth/connect');
-  url.search = new URLSearchParams({ response_type: 'code', client_id: config.apiKey, redirect_uri: config.redirectUri, scope: 'shops_r listings_r', state, code_challenge: createHash('sha256').update(verifier).digest('base64url'), code_challenge_method: 'S256' }).toString();
+  url.search = new URLSearchParams({ response_type: 'code', client_id: config.apiKey, redirect_uri: config.redirectUri, scope: 'shops_r listings_r listings_w', state, code_challenge: createHash('sha256').update(verifier).digest('base64url'), code_challenge_method: 'S256' }).toString();
   return { url: url.href, state, verifier, createdAt: Date.now() };
 }
 export function callbackCode(config: EtsyConfig, pending: ReturnType<typeof beginAuthorization>, callback: string) {
@@ -66,6 +66,38 @@ export class EtsyApiClient {
       })().finally(() => { this.refreshing = undefined; });
     }
     return this.refreshing;
+  }
+  async finishDraft(listingId: string, description: string, taxonomyId: number, sectionName?: string) {
+    if (!/^[1-9]\d*$/.test(listingId) || !Number.isSafeInteger(taxonomyId) || taxonomyId <= 0) throw new Error('Invalid Etsy listing/category ID');
+    const tokens = await this.tokens();
+    if (tokens.scope && !tokens.scope.split(' ').includes('listings_w')) throw new Error('Etsy-Schreibberechtigung fehlt. npm run etsy:connect erneut ausführen.');
+    await this.verifyOwner(tokens.access_token);
+    const headers = { Authorization: `Bearer ${tokens.access_token}` };
+    const url = `https://api.etsy.com/v3/application/shops/${this.config.shopId}/listings/${listingId}`;
+    const read = () => this.request(`https://api.etsy.com/v3/application/listings/${listingId}`, { headers });
+    const before = z.object({ shop_id: z.number(), state: z.string() }).passthrough().parse(await read());
+    if (String(before.shop_id) !== this.config.shopId || before.state !== 'draft') throw new Error('Automatische Korrektur nur für eigene Etsy-Entwürfe erlaubt.');
+    const partnerData = z.object({ results: z.array(z.object({ production_partner_id: z.number().int().positive(), partner_name: z.string() }).passthrough()) }).parse(await this.request(`https://api.etsy.com/v3/application/shops/${this.config.shopId}/production-partners`, { headers }));
+    const partners = partnerData.results.filter(p => p.partner_name.trim().toLowerCase() === 'gelato');
+    const body = new URLSearchParams({ taxonomy_id: String(taxonomyId), description: description.replace(/\*\*([^*]+)\*\*/g, '$1') });
+    let sectionId: number | undefined;
+    if (sectionName) {
+      const sections = z.object({ results: z.array(z.object({ shop_section_id: z.number().int().positive(), title: z.string() })) }).parse(await this.request(`https://api.etsy.com/v3/application/shops/${this.config.shopId}/sections`, { headers }));
+      const matches = sections.results.filter(s => s.title === sectionName);
+      if (matches.length !== 1) throw new Error(`Shop-Abteilung "${sectionName}" fehlt oder ist nicht eindeutig. Bitte in Etsy anlegen.`);
+      sectionId = matches[0]!.shop_section_id;
+      body.set('shop_section_id', String(sectionId));
+    }
+    if (partners.length === 1) {
+      const previous = Array.isArray(before.production_partner_ids) ? before.production_partner_ids.filter((id): id is number => typeof id === 'number' && Number.isInteger(id)) : [];
+      body.set('production_partner_ids', [...new Set([...previous, partners[0]!.production_partner_id])].join(','));
+    }
+    await this.request(url, { method: 'PATCH', headers: { ...headers, 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const after = z.object({ state: z.string(), taxonomy_id: z.number(), description: z.string(), shop_section_id: z.number().nullable().optional() }).parse(await read());
+    if (sectionId && after.shop_section_id !== sectionId) throw new Error('Etsy-Shop-Abteilung konnte nicht bestätigt werden.');
+    if (after.state !== 'draft' || after.taxonomy_id !== taxonomyId) throw new Error('Etsy-Korrektur konnte nicht bestätigt werden.');
+    if (description.includes('\n\n') && !after.description.includes('\n\n')) throw new Error('Etsy hat die Absatzabstände nicht übernommen.');
+    return { listingId, productionPartnerAssigned: partners.length === 1 };
   }
   async listDrafts(limit = 25, offset = 0) {
     const tokens = await this.tokens();

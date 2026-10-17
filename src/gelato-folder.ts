@@ -3,11 +3,11 @@ import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { appendDescriptionDefaults, makeProfileTitle, readProductFolder } from './folder-input.js';
-import { GelatoApiClient, buildGelatoPayload } from './clients/gelato.js';
+import { GelatoApiClient, GelatoHttpError, buildGelatoPayload, completeEtsySizeGrid } from './clients/gelato.js';
 import { analyzeArtwork, prepareArtwork, WHITE_PRINT_NOTICE } from './prepare-artwork.js';
-import { storageConfig, uploadArtwork } from './artwork-storage.js';
+import { validateStorage, uploadArtwork } from './artwork-storage.js';
 
-interface Profile { templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string }
+interface Profile { templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string; etsyTaxonomyId?: number; etsySection?: string }
 interface Entry { profile: string; templateId: string; placeholder: string; status: string; productId?: string; externalId?: string | null }
 interface State { fingerprint: string; storeId: string; entries: Entry[] }
 async function optionalState(path: string): Promise<State | undefined> {
@@ -60,9 +60,12 @@ export async function runFolder(args = process.argv.slice(2)) {
   const pending = state.entries.filter(e => !e.productId);
   const templates = new Map<string, Awaited<ReturnType<GelatoApiClient['getTemplate']>>>();
   if (pending.length) {
-    storageConfig();
+    console.log("Speicherzugang und Gelato-Vorlage prüfen …");
+    await validateStorage();
     for (const entry of pending) {
-      const template = await client.getTemplate(entry.templateId);
+      const selection = completeEtsySizeGrid(await client.getTemplate(entry.templateId));
+      const template = selection.template;
+      if (selection.removedSizes.length) console.log(`Alle Vorlagenfarben bleiben erhalten. Nicht in allen Farben verfügbare Größen entfallen: ${selection.removedSizes.join(', ')}. ${template.variants.length} vollständige Kombinationen.`);
       if (template.id !== entry.templateId) throw new Error('Gelato hat eine unerwartete Vorlage zurückgegeben.');
       buildGelatoPayload(template, metadataFor(entry.profile), 'https://example.invalid/preflight.png', entry.placeholder);
       templates.set(entry.profile, template);
@@ -75,19 +78,46 @@ export async function runFolder(args = process.argv.slice(2)) {
   try {
     const latest = await optionalState(statePath);
     if (JSON.stringify(latest) !== JSON.stringify(previous)) throw new Error('Auftragsstatus inzwischen geändert. Erneut aufrufen.');
-    if (pending.length) await prepareArtwork(input.image, preparedImage);
+    if (pending.length) {
+      console.log("Druckbild vorbereiten und komprimieren …");
+      await prepareArtwork(input.image, preparedImage);
+      console.log("Bild zum konfigurierten Speicher hochladen und Downloadlink erzeugen …");
+    }
     const artworkUrl = pending.length ? await uploadArtwork(preparedImage) : undefined;
+    if (pending.length) console.log("Bild-Upload abgeschlossen.");
     if (!previous) await save();
     for (const entry of state.entries) {
       if (!entry.productId) {
         entry.status = 'creating'; await save();
-        const result = await client.createFromTemplate(buildGelatoPayload(templates.get(entry.profile)!, metadataFor(entry.profile), artworkUrl!, entry.placeholder));
+        console.log(`${entry.profile}: Produkt bei Gelato anlegen (Antwort kann bis zu 120 Sekunden dauern) …`);
+        const result = await client.createFromTemplate(buildGelatoPayload(templates.get(entry.profile)!, metadataFor(entry.profile), artworkUrl!, entry.placeholder)).catch(async error => {
+          if (error instanceof GelatoHttpError && [400, 401, 403, 404, 422].includes(error.status)) {
+            entry.status = 'rejected'; await save();
+          }
+          throw error;
+        });
         if (!result.id) throw new Error('Gelato-Antwort ohne Produkt-ID. Auftrag im Dashboard prüfen.');
         entry.productId = result.id; entry.status = result.status; entry.externalId = result.externalId; await save();
       }
+      console.log(`${entry.profile}: Status für Gelato-Produkt ${entry.productId} abrufen …`);
       const product = await client.getProduct(entry.productId);
       entry.status = product.status; entry.externalId = product.externalId; await save();
       console.log(`${entry.profile}: Gelato-ID ${entry.productId}, Status ${entry.status}, Shop-ID ${entry.externalId ?? 'noch ausstehend'}`);
+      if (entry.externalId && profiles[entry.profile]!.etsyTaxonomyId) {
+        try {
+          if (process.env.ETSY_ENABLED !== 'true') throw new Error('ETSY_ENABLED=true und Etsy-Anmeldung erforderlich.');
+          const { loadConfig } = await import('./config.js');
+          const { EtsyApiClient } = await import('./clients/etsy.js');
+          const config = loadConfig();
+          if (!config.etsy) throw new Error('Etsy-Zugang fehlt.');
+          const result = await new EtsyApiClient(config.etsy).finishDraft(String(entry.externalId), metadataFor(entry.profile).description, profiles[entry.profile]!.etsyTaxonomyId!, profiles[entry.profile]!.etsySection);
+          console.log(`Etsy-Entwurf ${entry.externalId}: Kinderkategorie, Shop-Abteilung und Absätze korrigiert.`);
+          if (!result.productionPartnerAssigned) console.log('Offen: Gelato einmalig als Produktionspartner im Etsy-Shop anlegen; eindeutige Zuordnung war nicht möglich.');
+        } catch (error) {
+          console.log(`Etsy-Nachbearbeitung offen: ${error instanceof Error ? error.message : 'Fehler'}. Nach Behebung gelato:resume erneut ausführen.`);
+        }
+        console.log('Im Etsy-Editor noch prüfen: Wie stellt dein Shop diesen Artikel her? sowie GPSR-Hersteller/Sicherheitsinformationen.');
+      }
       if (entry.status === 'publishing_error') throw new Error('Gelato meldet einen Übertragungsfehler. Details im Dashboard prüfen.');
     }
     console.log('Nicht sichtbares Produkt angefordert. Asynchrone Übertragung mit gelato:resume prüfen. Etsy-Entwurfsstatus im Shop prüfen.');

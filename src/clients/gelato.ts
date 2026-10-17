@@ -1,3 +1,4 @@
+import { toGelatoHtml } from '../folder-input.js';
 export interface GelatoProductInput { title: string; productTemplateId: string; artworkUrl: string }
 export interface GelatoClient { createProduct(input: GelatoProductInput): Promise<{ id: string }> }
 export interface GelatoTemplate {
@@ -10,6 +11,11 @@ export interface GelatoPayload {
   variants: Array<{ templateVariantId: string; imagePlaceholders: Array<{ name: string; fileUrl: string; fitMethod: 'meet' }> }>;
 }
 export interface GelatoProduct { id: string; status: string; externalId?: string | null }
+export class GelatoHttpError extends Error {
+  constructor(public status: number, method: string, detail: string) {
+    super(`Gelato ${method}: HTTP ${status}${detail ? ` – ${detail}` : ''}`);
+  }
+}
 export class GelatoApiClient {
   constructor(private apiKey: string, private storeId: string) {
     if (!apiKey || !storeId) throw new Error('GELATO_API_KEY und GELATO_STORE_ID fehlen.');
@@ -25,8 +31,12 @@ export class GelatoApiClient {
       const code = (error as { cause?: { code?: string } }).cause?.code ?? (error as Error).name;
       throw new Error(`Gelato-Verbindungsfehler (${method}, ${code}). Kein automatischer Schreib-Wiederholungsversuch.`);
     }
-    // Response bodies can contain private signed artwork URLs. Do not log them.
-    if (!response.ok) throw new Error(`Gelato ${method}: HTTP ${response.status}. Details im Gelato-Dashboard prüfen.`);
+    if (!response.ok) {
+      // Redact links and credentials before exposing Gelato validation details.
+      const raw = await response.text();
+      const detail = raw.split(this.apiKey).join('[API-KEY]').replace(/https?:[^\s"<>]+/gi, '[URL]').slice(0, 1800);
+      throw new GelatoHttpError(response.status, method, detail);
+    }
     return response.json() as Promise<T>;
   }
   getTemplate(id: string) { return this.request<GelatoTemplate>(`/templates/${encodeURIComponent(id)}`); }
@@ -38,8 +48,21 @@ export function buildGelatoPayload(template: GelatoTemplate, input: { title: str
   const variants = template.variants.map(variant => {
     // Every editable layer must be accounted for; never silently publish old template artwork.
     const names = variant.imagePlaceholders?.map(p => p.name) ?? [];
-    if (!variant.id || names.length !== 1 || names[0] !== placeholder) throw new Error(`Variante ${variant.id}: genau ein Bildplatzhalter namens ${placeholder} erforderlich. Vorlage prüfen.`);
+    if (!variant.id || names.length !== 1 || names[0] !== placeholder) throw new Error(`Variante ${variant.id}: genau ein Bildplatzhalter namens ${placeholder} erforderlich. Gefunden: ${names.length ? names.join(", ") : "keiner"}. config/gelato-products.json und Vorlage prüfen.`);
     return { templateVariantId: variant.id, imagePlaceholders: [{ name: placeholder, fileUrl: artworkUrl, fitMethod: 'meet' as const }] };
   });
-  return { templateId: template.id, ...input, isVisibleInTheOnlineStore: false, variants };
+  return { templateId: template.id, ...input, description: toGelatoHtml(input.description), isVisibleInTheOnlineStore: false, variants };
+}
+
+export function completeEtsySizeGrid(template: GelatoTemplate) {
+  if (!template.variants.some(v => v.variantOptions?.length)) return { template, removedSizes: [] as string[] };
+  const option = (v: GelatoTemplate['variants'][number], name: string) => v.variantOptions?.find(o => o.name.toLowerCase() === name)?.value;
+  if (template.variants.some(v => !option(v, 'color') || !option(v, 'size') || v.variantOptions?.length !== 2)) throw new Error('Variantenprüfung: erwartet Color und Size. Vorlage prüfen.');
+  const colors = [...new Set(template.variants.map(v => option(v, 'color')!))];
+  const sizes = [...new Set(template.variants.map(v => option(v, 'size')!))];
+  const common = sizes.filter(size => colors.every(color => template.variants.some(v => option(v, 'color') === color && option(v, 'size') === size)));
+  if (!common.length) throw new Error('Keine Größe in allen Vorlagenfarben vorhanden. Gelato-Vorlage anpassen.');
+  const variants = template.variants.filter(v => common.includes(option(v, 'size')!));
+  if (variants.length !== colors.length * common.length) throw new Error('Doppelte Größen-/Farbkombinationen in der Gelato-Vorlage.');
+  return { template: { ...template, variants }, removedSizes: sizes.filter(size => !common.includes(size)) };
 }

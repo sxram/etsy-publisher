@@ -11,7 +11,7 @@ test('OAuth uses S256 and rejects wrong, expired, duplicate and denied callbacks
   const pending = beginAuthorization(config);
   const url = new URL(pending.url);
   assert.equal(url.searchParams.get('code_challenge'), createHash('sha256').update(pending.verifier).digest('base64url'));
-  assert.equal(url.searchParams.get('scope'), 'shops_r listings_r');
+  assert.equal(url.searchParams.get('scope'), 'shops_r listings_r listings_w');
   const callback = `${config.redirectUri}?state=${pending.state}&code=code`;
   assert.equal(callbackCode(config, pending, callback), 'code');
   for (const value of [callback.replace('example.com', 'evil.com'), callback.replace(pending.state, 'wrong'), `${callback}&state=another`, `${callback}&error=access_denied`]) assert.throws(() => callbackCode(config, pending, value));
