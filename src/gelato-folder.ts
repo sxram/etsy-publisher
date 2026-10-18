@@ -6,15 +6,16 @@ import { appendDescriptionDefaults, makeProfileTitle, readProductFolder } from '
 import { GelatoApiClient, GelatoHttpError, buildGelatoPayload, completeEtsySizeGrid } from './clients/gelato.js';
 import { analyzeArtwork, prepareArtwork, WHITE_PRINT_NOTICE } from './prepare-artwork.js';
 import { validateStorage, uploadArtwork } from './artwork-storage.js';
+import { ensureEtsyShipping } from './etsy-shipping.js';
 
-interface Profile { templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string; etsyTaxonomyId?: number; etsySection?: string }
-interface Entry { profile: string; templateId: string; placeholder: string; status: string; productId?: string; externalId?: string | null }
+interface Profile { templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string; etsyTaxonomyId?: number; etsySection?: string; etsyProductionProcessRequested?: string }
+interface Entry { profile: string; templateId: string; placeholder: string; status: string; productId?: string; externalId?: string | null; shippingCheck?: { status: 'pending' | 'waiting_for_etsy' | 'verified'; checkedAt?: string; message?: string } }
 interface State { fingerprint: string; storeId: string; entries: Entry[] }
 async function optionalState(path: string): Promise<State | undefined> {
   try { return JSON.parse(await readFile(path, 'utf8')) as State; }
   catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
 }
-export async function runFolder(args = process.argv.slice(2)) {
+export async function runFolder(args = process.argv.slice(2), shippingCheck: (listingId: string) => Promise<void> = ensureEtsyShipping) {
   const command = args[0];
   if (!['preview', 'create', 'resume'].includes(command ?? '')) throw new Error('Aufruf: npm run gelato:preview|gelato:create|gelato:resume -- --dir ./motiv [--products tshirt]');
   const option = (name: string) => { const index = args.indexOf(name); const value = index >= 0 ? args[index + 1] : undefined; if (index >= 0 && (!value || value.startsWith('--'))) throw new Error(`Wert für ${name} fehlt.`); return value; };
@@ -34,6 +35,21 @@ export async function runFolder(args = process.argv.slice(2)) {
   const metadataFor = (profile: string) => ({ ...input.metadata, title: makeProfileTitle(input.metadata.title, profiles[profile]!.titleSuffix), description: appendDescriptionDefaults(input.metadata.description, [...(profiles[profile]!.descriptionDefaults ?? []), ...(!artwork.rectangular ? [WHITE_PRINT_NOTICE] : [])]) });
   const out = join(dir, 'out', 'gelato');
   await mkdir(out, { recursive: true });
+  const manualChecks = entries.map(entry => ({
+    profile: entry.profile,
+    productionProcess: {
+      requestedDefault: profiles[entry.profile]!.etsyProductionProcessRequested ?? null,
+      status: 'manual-review-required',
+      apiSupported: false,
+      note: 'Etsy bietet dieses Feld nicht in der öffentlichen API. Vor manueller Auswahl prüfen: Gelato bedruckt ein fertiges Basisshirt; Shop-Design und Produktionspartner korrekt angeben.',
+    },
+    returnPolicy: { status: 'manual-review-required', documents: 'docs/shop-policies/', note: '30-Tage-Rückgabe und Rechtstexte im Etsy-Shop hinterlegen; keine automatische Veröffentlichung.' },
+    shipping: { status: 'automatic-check-pending', note: 'Nach Gelato-Übertragung zu Etsy werden die Versand-Länderausschlüsse automatisch geprüft. Bei noch fehlender Etsy-ID oder Fehlern mit gelato:resume fortsetzen; nicht ungeprüft veröffentlichen.' },
+    gpsr: { status: 'manual-review-required', note: 'Herstellerrolle und Produktunterlagen klären. Shop-Kontakt ist nicht automatisch Hersteller oder EU-verantwortliche Person.' },
+  }));
+  await writeFile(join(out, 'etsy-manual-checks.json'), JSON.stringify(manualChecks, null, 2) + '\n');
+  for (const check of manualChecks) if (check.productionProcess.requestedDefault) console.log(`${check.profile}: Etsy-Herstellungsangabe manuell prüfen: "${check.productionProcess.requestedDefault}". Nicht per API gesetzt. Details: ${join(out, 'etsy-manual-checks.json')}`);
+
   const preparedImage = join(out, 'artwork-prepared.png');
   const statePath = join(out, 'state.json');
   const storeId = process.env.GELATO_STORE_ID?.trim() || '';
@@ -118,9 +134,31 @@ export async function runFolder(args = process.argv.slice(2)) {
         }
         console.log('Im Etsy-Editor noch prüfen: Wie stellt dein Shop diesen Artikel her? sowie GPSR-Hersteller/Sicherheitsinformationen.');
       }
+      // Separate from draft finishing: shipping must also be checked when a listing is already active,
+      // or when the optional category/description finishing step cannot run.
+      const shippingReady = !!entry.externalId && entry.status === 'active';
+      entry.shippingCheck = { status: shippingReady ? 'pending' : 'waiting_for_etsy' };
+      await save();
+      if (shippingReady) {
+        console.log(`${entry.profile}: Nachträglicher Etsy-Zugriff für Versand-Länderausschlüsse …`);
+        try {
+          await shippingCheck(String(entry.externalId));
+          entry.shippingCheck = { status: 'verified', checkedAt: new Date().toISOString() };
+          console.log(`${entry.profile}: Etsy-Versand-Länderausschlüsse geprüft und bei Bedarf angewendet.`);
+        } catch (error) {
+          entry.shippingCheck = { status: 'pending', message: error instanceof Error ? error.message : 'Etsy-Versandprüfung fehlgeschlagen.' };
+          console.error(`${entry.profile}: VERSANDPRÜFUNG OFFEN: ${entry.shippingCheck.message}`);
+          console.error('Artikel noch nicht veröffentlichen. Nach Behebung denselben gelato:resume-Befehl erneut ausführen. Kein neues Gelato-Produkt erstellen.');
+        }
+      } else {
+        console.log(`${entry.profile}: Versandprüfung wartet auf die fertige Etsy-Übertragung (Gelato-Status ${entry.status}, Etsy-ID ${entry.externalId ?? 'ausstehend'}). Nach Übertragung gelato:resume erneut ausführen; Artikel vorher nicht veröffentlichen.`);
+      }
+      await save();
       if (entry.status === 'publishing_error') throw new Error('Gelato meldet einen Übertragungsfehler. Details im Dashboard prüfen.');
     }
-    console.log('Nicht sichtbares Produkt angefordert. Asynchrone Übertragung mit gelato:resume prüfen. Etsy-Entwurfsstatus im Shop prüfen.');
+    const shippingPending = state.entries.some(e => e.shippingCheck?.status !== 'verified');
+    console.log(shippingPending ? 'Noch nicht fertig: Etsy-Versandprüfung offen. Mit gelato:resume fortsetzen.' : 'Etsy-Versandprüfung abgeschlossen. Weitere manuelle Etsy-Angaben und Entwurfsstatus im Shop prüfen.');
+    return { shippingPending };
   } finally { await lock.close(); await unlink(lockPath); }
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) runFolder().catch(error => { console.error(error instanceof Error ? error.message : 'Fehler'); process.exitCode = 1; });
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) runFolder().then(result => { if (result?.shippingPending) process.exitCode = 1; }).catch(error => { console.error(error instanceof Error ? error.message : 'Fehler'); process.exitCode = 1; });

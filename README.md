@@ -258,3 +258,12 @@ Nach Rückgabe einer Etsy-ID kann der Publisher die eigene Entwurfsbeschreibung 
 Gelato erhält die Beschreibung künftig mit HTML-Absätzen und `<br>`-Umbrüchen; Etsy erhält für die direkte Nachbearbeitung Klartext mit Leerzeilen. Bestehende Gelato-Produktbeschreibungen werden damit nicht rückwirkend aktualisiert.
 
 Das T-Shirt-Profil ordnet eigene Etsy-Entwürfe bei der Nachbearbeitung der Shop-Abteilung `Kids T-Shirts` zu (`etsySection` im Produktprofil). Die Abteilung muss bereits im Shop existieren; fehlt sie, wird dies vor der Änderung gemeldet.
+
+
+### Automatische Etsy-Versand-Länderausschlüsse
+
+`gelato:create` und `gelato:resume` rufen nach Erhalt der Etsy-Artikel-ID automatisch die gezielte Versandprüfung aus dem Projekt `etsy-poster-to-digital` auf. `ETSY_SHIPPING_SCRIPT` muss auf dessen absoluten Pfad `src/shipping-exclusions.ts` zeigen. Der Unterprozess nutzt ausdrücklich die .env und Etsy-OAuth-Datei dieses Etsy-Projekts; Etsy-Zugangsdaten beider Projekte werden nicht vermischt. Dort muss `shops_w` einmal freigegeben sein. Der optionale eigene Etsy-Zugang des Giggle-Publishers für Kategorie/Beschreibung bleibt davon unabhängig.
+
+Die Regeln werden zentral in `etsy-poster-to-digital/config/shipping-exclusions.json` gepflegt: aktuell Poster ohne Spanien und Kids T-Shirts ohne Frankreich/Spanien. Der Artikel muss nach der Etsy-Nachbearbeitung der passenden Shop-Abteilung zugeordnet sein. Geteilte Profile mit widersprüchlichen Regeln werden nicht automatisch geändert. Profiländerungen wirken auf alle zugeordneten Artikel. Das Erstellen eines neuen Gelato-Produkts ist zum Fortsetzen niemals nötig.
+
+Solange die Etsy-ID fehlt oder die Prüfung scheitert, steht der offene Schritt in `<motiv>/out/gelato/state.json` unter `shippingCheck`; das Kommando weist sichtbar darauf hin und endet mit Status 1. Danach denselben `gelato:resume -- --dir …`-Aufruf verwenden. Bei jedem Resume wird erneut geprüft, damit spätere Profiländerungen erkannt werden. Es gibt keine laufende Hintergrundüberwachung; nach manuellen Änderungen oder späteren Gelato-/Printify-Synchronisationen erneut Resume ausführen. Eine erfolgreiche Versandprüfung veröffentlicht den Artikel nicht und ersetzt keine GPSR- oder Rechtstextprüfung.
