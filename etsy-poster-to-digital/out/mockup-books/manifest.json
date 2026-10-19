@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "kind": "book-mockup",
+  "shopId": 68057917,
+  "entries": [
+    {
+      "listingId": 4588431637,
+      "title": "Giggle Dumplings Mandala Coloring Book | 33 Kawaii Animal & Character Mandalas (PDF)",
+      "originalId": 8622707338,
+      "rank": 1,
+      "altText": null,
+      "original": "4588431637/8622707338-original.bin",
+      "preview": "4588431637/8622707338-book-mockup.jpg",
+      "status": "applied",
+      "operation": "insert",
+      "previousIds": [
+        8622707338,
+        8670527959,
+        8670638339,
+        8670638393,
+        8670637875
+      ],
+      "newId": 8672846578
+    },
+    {
+      "listingId": 4586038104,
+      "title": "Giggle Dumplings Halloween Activity Pack – 15 Coloring Pages, 4 Puzzles, Monster Mask (Digital Download)",
+      "originalId": 8656960235,
+      "rank": 1,
+      "altText": null,
+      "original": "4586038104/8656960235-original.bin",
+      "preview": "4586038104/8656960235-book-mockup.jpg",
+      "status": "applied",
+      "operation": "insert",
+      "previousIds": [
+        8656960235,
+        8652148583,
+        8652149625,
+        8604309838,
+        8652150323,
+        8652150019,
+        8652150021,
+        8652150631,
+        8604309922
+      ],
+      "newId": 8672846902
+    },
+    {
+      "listingId": 4586017730,
+      "title": "Giggle Dumplings Halloween Coloring and Activity Book  - 67 Printable Pages, Kawaii Puzzles and Crafts",
+      "originalId": 8604234292,
+      "rank": 1,
+      "altText": null,
+      "original": "4586017730/8604234292-original.bin",
+      "preview": "4586017730/8604234292-book-mockup.jpg",
+      "status": "applied",
+      "operation": "insert",
+      "previousIds": [
+        8604234292,
+        8651974493,
+        8651973863,
+        8604131496,
+        8604132334,
+        8651974409,
+        8651974255,
+        8651974659,
+        8651974663,
+        8651975005,
+        8604133008
+      ],
+      "newId": 8672847206
+    },
+    {
+      "listingId": 4577780010,
+      "title": "Giggle Dumplings Coloring Pages – 20 Kawaii Characters (A4 + US Letter PDF)",
+      "originalId": 8657021473,
+      "rank": 1,
+      "altText": null,
+      "original": "4577780010/8657021473-original.bin",
+      "preview": "4577780010/8657021473-book-mockup.jpg",
+      "status": "applied",
+      "operation": "insert",
+      "previousIds": [
+        8657021473,
+        8589800151,
+        8589800427,
+        8541934760,
+        8589800983,
+        8589801069,
+        8541935230,
+        8541935344,
+        8541935486
+      ],
+      "newId": 8672847520
+    },
+    {
+      "listingId": 4577462134,
+      "title": "Giggle Dumplings Coloring Book – 55 Funny Pages, Puzzles (Digital Download)",
+      "originalId": 8656988587,
+      "rank": 1,
+      "altText": null,
+      "original": "4577462134/8656988587-original.bin",
+      "preview": "4577462134/8656988587-book-mockup.jpg",
+      "status": "applied",
+      "operation": "insert",
+      "previousIds": [
+        8656988587,
+        8541419238,
+        8541419816,
+        8589408701,
+        8589409141,
+        8589409741,
+        8589410595,
+        8589411229,
+        8541547200
+      ],
+      "newId": 8720679849
+    }
+  ]
+}

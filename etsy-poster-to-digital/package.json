@@ -1,0 +1,53 @@
+{
+  "name": "etsy-poster-to-digital",
+  "version": "0.6.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "auth": "tsx src/cli.ts auth",
+    "list": "tsx src/cli.ts list",
+    "posters": "tsx src/cli.ts posters",
+    "whoami": "tsx src/cli.ts whoami",
+    "digital:scan": "tsx src/cli.ts digital:scan",
+    "digital:preview": "tsx src/cli.ts digital:preview",
+    "digital:create": "tsx src/cli.ts digital:create",
+    "digital:preview-all": "tsx src/cli.ts digital:preview-all",
+    "digital:create-all": "tsx src/cli.ts digital:create-all",
+    "digital:resume": "tsx src/cli.ts digital:resume",
+    "watermark:prepare": "tsx src/watermark.ts prepare",
+    "watermark:apply": "tsx src/watermark.ts apply",
+    "watermark:restore": "tsx src/watermark.ts restore",
+    "typecheck": "tsc --noEmit",
+    "test:watermark": "node --import tsx --test src/watermark-image.test.ts src/watermark-flow.test.ts",
+    "mockup:prepare": "tsx src/mockup.ts prepare",
+    "mockup:apply": "tsx src/mockup.ts apply",
+    "mockup:restore": "tsx src/mockup.ts restore",
+    "test:mockup": "node --import tsx --test src/mockup-image.test.ts src/mockup-flow.test.ts",
+    "mockup:reconcile": "tsx src/mockup.ts reconcile",
+    "book-mockup:prepare": "tsx src/book-mockup.ts prepare",
+    "book-mockup:apply": "tsx src/book-mockup.ts apply",
+    "book-mockup:restore": "tsx src/book-mockup.ts restore",
+    "book-mockup:reconcile": "tsx src/book-mockup.ts reconcile",
+    "test:book-mockup": "node --import tsx --test src/book-mockup-image.test.ts src/book-mockup-flow.test.ts",
+    "article:process": "tsx src/process-article.ts",
+    "poster:preview": "tsx src/new-poster.ts",
+    "poster:create": "tsx src/poster-process.ts",
+    "test:poster": "node --import tsx --test src/new-poster.test.ts src/poster-process.test.ts",
+    "poster:draft": "tsx src/new-poster.ts --create",
+    "poster:prices": "tsx src/poster-prices.ts",
+    "test:poster-prices": "node --import tsx --test src/poster-prices.test.ts",
+    "shipping:exclude": "tsx src/shipping-exclusions.ts",
+    "test:shipping": "node --import tsx --test src/shipping-exclusions.test.ts",
+    "gpsr:manufacturer": "tsx src/gpsr-manufacturer.ts",
+    "mockups:upload": "tsx src/color-mockup-upload.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

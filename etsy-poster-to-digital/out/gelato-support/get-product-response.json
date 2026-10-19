@@ -1,0 +1,744 @@
+{
+  "note": "Sanitized excerpt of an actual Get Product API response. Credentials and download URLs omitted.",
+  "checkedAt": "2026-10-17T20:21:50.263Z",
+  "elapsedMinutesSinceCreation": 40,
+  "method": "GET",
+  "endpoint": "https://ecommerce.gelatoapis.com/v1/stores/bb748578-41a4-40bc-b2cd-9af92bc24807/products/fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+  "httpStatus": 200,
+  "response": {
+    "id": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+    "storeId": "bb748578-41a4-40bc-b2cd-9af92bc24807",
+    "title": "Space Squad Kids T-Shirt | Cute Alien & Space Animals Tee | Galaxy Graphic Shirt | Fun Astronaut | Kids Crewneck T-Shirt | Gildan® 5000B",
+    "status": "active",
+    "variants": [
+      {
+        "id": "ef837a43-bc98-4a2a-b558-30a856e014a4",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Purple - L - DTG (Direct-to-garment)",
+        "externalId": "35036563813",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_purple_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "14f7c518-976e-46b0-96a9-2ebfe0b64fbc",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Purple - XL - DTG (Direct-to-garment)",
+        "externalId": "35036563809",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_purple_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "2b64ec52-1839-4ca6-bec1-56c78e358102",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "White - S - DTG (Direct-to-garment)",
+        "externalId": "35036563885",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_white_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "29108bfa-c260-4623-b8c4-8e78d2460cea",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "White - M - DTG (Direct-to-garment)",
+        "externalId": "35036563883",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_white_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "c295a6b7-3c9f-4d9b-8818-24b4acc6e2ed",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "White - L - DTG (Direct-to-garment)",
+        "externalId": "35417414722",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_white_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "5c4e6240-8904-4d13-8d5d-f79f25098be1",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "White - XL - DTG (Direct-to-garment)",
+        "externalId": "35036563881",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_white_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "c956a0af-d032-4d58-9520-c8bb387588d3",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Ash - S - DTG (Direct-to-garment)",
+        "externalId": "35036563889",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_ash_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "d22328df-786f-42c3-b350-5cd7ecc142d2",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Ash - M - DTG (Direct-to-garment)",
+        "externalId": "35036563887",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_ash_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "ee5b1ad8-200c-4e52-828d-5751a4e8c9ba",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Ash - L - DTG (Direct-to-garment)",
+        "externalId": "35417414726",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_ash_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "31944aa5-0e86-4d89-9017-bec325e70d1c",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Ash - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414724",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_ash_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "733ff3f5-7cc4-4797-b33a-3ab6bd43be6a",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Sport Grey - S - DTG (Direct-to-garment)",
+        "externalId": "35417414720",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_sport-grey_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "ef9eaab2-4b73-4940-b068-4c0041f493ce",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Sport Grey - M - DTG (Direct-to-garment)",
+        "externalId": "35417414718",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_sport-grey_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "91949432-45b4-4ae1-80d2-36ca0369dd10",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Sport Grey - L - DTG (Direct-to-garment)",
+        "externalId": "35417414716",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_sport-grey_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "dbf2ed10-a10c-436c-aaa8-79f4e1222b00",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Sport Grey - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414714",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_sport-grey_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "40829a76-18e1-4ea7-9e6d-e1040e5711b5",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Light Pink - S - DTG (Direct-to-garment)",
+        "externalId": "35036563879",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_light-pink_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "218a2f30-8df5-433e-9b8d-9e490a8795a4",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Light Pink - M - DTG (Direct-to-garment)",
+        "externalId": "35417414712",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_light-pink_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "17cb90b8-b720-40a6-83f6-c446e439dd65",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Light Pink - L - DTG (Direct-to-garment)",
+        "externalId": "35036563877",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_light-pink_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "fa06e01f-4663-4330-af2e-7e7a0a9cf085",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Light Pink - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414710",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_light-pink_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "f65d68c9-4a8f-4e77-a65f-3c751a829b3b",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Light Blue - S - DTG (Direct-to-garment)",
+        "externalId": "35417414708",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_light-blue_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "95708f55-0fd1-4072-8e94-0be1569c13e7",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Light Blue - M - DTG (Direct-to-garment)",
+        "externalId": "35417414706",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_light-blue_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "6ed3c2b0-25ed-411f-b0b6-4091648b3813",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Light Blue - L - DTG (Direct-to-garment)",
+        "externalId": "35417414704",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_light-blue_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "6d3344a4-82f8-428d-9875-f7698d8083f9",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Light Blue - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414702",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_light-blue_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "f00823ad-0e56-41da-a3db-260a1a154de7",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Carolina Blue - S - DTG (Direct-to-garment)",
+        "externalId": "35036563875",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_carolina-blue_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "64c94d98-bcdd-4e25-b45f-d4c4e212d6dc",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Carolina Blue - M - DTG (Direct-to-garment)",
+        "externalId": "35417414700",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_carolina-blue_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "e173a6d0-c24f-4841-b0c4-657a377771ab",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Carolina Blue - L - DTG (Direct-to-garment)",
+        "externalId": "35036563873",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_carolina-blue_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "baf787bf-3426-4c76-90cc-b837464849f0",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Carolina Blue - XL - DTG (Direct-to-garment)",
+        "externalId": "35036563871",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_carolina-blue_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "f40dc2d9-cbd9-43ce-babf-828909d5dd9f",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Azalea - S - DTG (Direct-to-garment)",
+        "externalId": "35417414698",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_azalea_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "c056dfa2-630c-4c67-bb87-86eec4c74e9e",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Azalea - M - DTG (Direct-to-garment)",
+        "externalId": "35036563869",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_azalea_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "6efda96a-7306-4b06-b8f8-2df7e166935a",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Azalea - L - DTG (Direct-to-garment)",
+        "externalId": "35036563867",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_azalea_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "0c6fd585-3875-427c-ab4a-a9e1b46aba9c",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Azalea - XL - DTG (Direct-to-garment)",
+        "externalId": "35036563865",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_azalea_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "b696cb41-5182-4385-9e43-6e5b8fd40cf5",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Irish Green - S - DTG (Direct-to-garment)",
+        "externalId": "35417414696",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_irish-green_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "9abb06b3-f1c0-4318-aae0-3c8714b92961",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Irish Green - M - DTG (Direct-to-garment)",
+        "externalId": "35036563863",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_irish-green_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "305beb60-3a8b-4816-80a0-7e1026e5cfaa",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Irish Green - L - DTG (Direct-to-garment)",
+        "externalId": "35036563861",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_irish-green_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "0bf73363-6585-4f8a-85de-03c9ae39bea6",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Irish Green - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414694",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_irish-green_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "858d8ccc-2bd5-40f9-9a52-9f661cea151b",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Royal - S - DTG (Direct-to-garment)",
+        "externalId": "35417414692",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_royal_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "c9d79fac-9d3c-4d81-8c8c-39f4508824ae",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Royal - M - DTG (Direct-to-garment)",
+        "externalId": "35036563859",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_royal_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "27aab343-d612-4322-8775-6f4e89ea8117",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Royal - L - DTG (Direct-to-garment)",
+        "externalId": "35417414690",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_royal_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "7f65a628-f8de-491b-95d4-9923d5013614",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Royal - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414688",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_royal_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "b28ea260-21ff-4a05-89b8-5225e5ada2ef",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Dark Heather - S - DTG (Direct-to-garment)",
+        "externalId": "35417414686",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_dark-heather_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "a8003353-7930-46f5-a9ba-10da70a350d9",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Dark Heather - M - DTG (Direct-to-garment)",
+        "externalId": "35417414684",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_dark-heather_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "9dca0b9e-4780-4d59-9dba-fe7653ebbe07",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Dark Heather - L - DTG (Direct-to-garment)",
+        "externalId": "35036563855",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_dark-heather_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "5ba4d8de-8d2a-4968-94f5-b6c2b609c289",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Dark Heather - XL - DTG (Direct-to-garment)",
+        "externalId": "35036563853",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_dark-heather_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "6f8f33c0-1f30-4fd9-8fcf-19b56013b803",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Heliconia - S - DTG (Direct-to-garment)",
+        "externalId": "35036563851",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_heliconia_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "20aafd05-8de7-4097-88c0-6224b7dc218f",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Heliconia - M - DTG (Direct-to-garment)",
+        "externalId": "35417414682",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_heliconia_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "23c4f454-6a5b-481d-a688-00f05084a523",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Heliconia - L - DTG (Direct-to-garment)",
+        "externalId": "35417414680",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_heliconia_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "617fff9a-23eb-4c5d-a505-31e426962867",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Heliconia - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414678",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_heliconia_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "64e69dc2-147b-4a24-b0d6-7095041c28df",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Red - S - DTG (Direct-to-garment)",
+        "externalId": "35036563847",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_red_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "15d7d3dd-7518-4328-92ea-9ebdd7e6231e",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Red - M - DTG (Direct-to-garment)",
+        "externalId": "35417414676",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_red_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "2d45d2f7-b5b2-43f0-bda6-7b46da935262",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Red - L - DTG (Direct-to-garment)",
+        "externalId": "35417414674",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_red_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "7bc7b80e-2d9d-4a72-b403-f3d228f7a3ec",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Red - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414672",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_red_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "eff011df-6e2f-48f0-9f81-8a73bdc724e2",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Maroon - S - DTG (Direct-to-garment)",
+        "externalId": "35036563845",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_maroon_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "f8cfde90-5207-4e58-816e-5f47310abd1a",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Maroon - M - DTG (Direct-to-garment)",
+        "externalId": "35036563843",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_maroon_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "56283f66-6e2b-42c8-8be0-0737a22f9977",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Maroon - L - DTG (Direct-to-garment)",
+        "externalId": "35417414670",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_maroon_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "8aedc70c-3d47-4e92-9076-c6537cdaa0f0",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Maroon - XL - DTG (Direct-to-garment)",
+        "externalId": "35036563841",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_maroon_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "373cf804-40f8-4987-9b3d-aa58ce15bfaa",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Cardinal Red - S - DTG (Direct-to-garment)",
+        "externalId": "35036563839",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_cardinal-red_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "45557691-bc22-46fa-bf9e-6d347bc9e7df",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Cardinal Red - M - DTG (Direct-to-garment)",
+        "externalId": "35036563837",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_cardinal-red_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "aa49372d-1184-483d-90e0-4cd3fc56b4a7",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Cardinal Red - L - DTG (Direct-to-garment)",
+        "externalId": "35417414668",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_cardinal-red_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "fadc96bc-1757-4486-9019-e38b32575ee1",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Cardinal Red - XL - DTG (Direct-to-garment)",
+        "externalId": "35036563835",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_cardinal-red_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "1d0fe488-09b4-4a93-b9ba-7ed8a44e0857",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Forest Green - S - DTG (Direct-to-garment)",
+        "externalId": "35036563833",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_forest-green_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "c214ae2e-61e1-464f-9a44-28f446806398",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Forest Green - M - DTG (Direct-to-garment)",
+        "externalId": "35417414666",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_forest-green_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "c12aada6-86e2-4380-bbe2-8f54e1c881ce",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Forest Green - L - DTG (Direct-to-garment)",
+        "externalId": "35417414664",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_forest-green_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "eae41b2e-1275-428f-bad9-59d770bd1241",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Forest Green - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414662",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_forest-green_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "c01b6292-555b-48e1-bec7-5db27a77cc94",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Navy - S - DTG (Direct-to-garment)",
+        "externalId": "35417414660",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_navy_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "f1a81c5e-a1b0-4db0-99eb-872e85eb927e",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Navy - M - DTG (Direct-to-garment)",
+        "externalId": "35036563829",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_navy_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "2446d622-6806-4194-aed7-b8f114c0ebcd",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Navy - L - DTG (Direct-to-garment)",
+        "externalId": "35417414654",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_navy_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "1c2e153b-841c-4bff-b907-2b6c94f61077",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Navy - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414652",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_navy_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "05795171-e603-4380-b749-1d148d698b9b",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Black - S - DTG (Direct-to-garment)",
+        "externalId": "35036563825",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_black_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "3a409c53-038d-4196-889f-6f1e8030bffb",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Black - M - DTG (Direct-to-garment)",
+        "externalId": "35036563823",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_black_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "87072eae-94b5-4b2f-bbfd-4e4c6e63f7ca",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Black - L - DTG (Direct-to-garment)",
+        "externalId": "35036563821",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_l_gco_black_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "0fa56ccc-4976-4e94-b623-daf825909ec6",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Black - XL - DTG (Direct-to-garment)",
+        "externalId": "35417414650",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_xl_gco_black_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "67d30ffc-dbc1-4301-9c75-701b8f46a043",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Purple - S - DTG (Direct-to-garment)",
+        "externalId": "35417414648",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_s_gco_purple_gpr_4-0_gildan_5000b"
+      },
+      {
+        "id": "1a45043a-bd87-40f5-acbb-8554cfe0f75e",
+        "clientId": "1fc2d1da-83bb-43ac-bc3c-7964fd7ea271",
+        "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+        "title": "Purple - M - DTG (Direct-to-garment)",
+        "externalId": "35036563815",
+        "connectionStatus": "connected",
+        "isHidden": false,
+        "productUid": "apparel_product_gca_t-shirt_gsc_crewneck_gcu_kids_gqa_classic_gsi_m_gco_purple_gpr_4-0_gildan_5000b"
+      }
+    ],
+    "previewUrl": "[REDACTED URL]",
+    "isReadyToPublish": true,
+    "externalId": "4597600781",
+    "errors": [],
+    "publishingErrorCode": null,
+    "publishingErrorDetails": null,
+    "createdAt": "2026-10-17T19:41:25+0000",
+    "updatedAt": "2026-10-17T20:17:25+0000"
+  }
+}

@@ -1,0 +1,749 @@
+{
+  "note": "Reconstructed from current local preview and live template; not a captured HTTP request. Only the artwork download URL is redacted. No credentials included.",
+  "productId": "fecc3861-96d6-40e3-89a6-a82ca9f675a7",
+  "method": "POST",
+  "endpoint": "https://ecommerce.gelatoapis.com/v1/stores/bb748578-41a4-40bc-b2cd-9af92bc24807/products:create-from-template",
+  "body": {
+    "templateId": "26d3ee9b-d450-4b9f-89e7-bc0cce8c4ddc",
+    "title": "Space Squad Kids T-Shirt | Cute Alien & Space Animals Tee | Galaxy Graphic Shirt | Fun Astronaut | Kids Crewneck T-Shirt | Gildan® 5000B",
+    "description": "🚀 **Blast Off into Adventure with the Giggle Cosmos Space Squad!** 🌟\n\nGet ready for an out-of-this-world adventure with the cutest crew in the galaxy!\n\nMeet the **Giggle Cosmos Space Squad** – three adorable little aliens and their furry cosmic companions, ready to explore the stars, discover new planets, and spread smiles across the universe.\n\nFeaturing colorful alien explorers, a playful space puppy, a magical cosmic kitten, and a cheerful moon bunny, this vibrant graphic tee brings imagination and adventure to everyday life.\n\nWith its bright galaxy colors, sparkling stars, and playful cartoon design, this shirt is perfect for little space explorers who dream of traveling beyond the moon!\n\n✨ **Why Kids Will Love It**\n\n- 🚀 Adorable alien astronauts with big personalities\n- 🪐 Colorful planets, stars, and a fun spaceship\n- 🐶 Cute space animals – puppy, kitten, and bunny\n- 🌈 Vibrant blue, purple, green, and yellow galaxy colors\n- ⭐ Playful \"SPACE SQUAD\" artwork\n- 💫 Exclusive Giggle Cosmos character design\n\n🌟 **Perfect For**\n\n- Little astronauts and space lovers\n- Kids who love aliens and cute animals\n- Birthday gifts for boys and girls\n- Space-themed birthday parties\n- Galaxy and astronaut enthusiasts\n- Everyday adventures and playful outfits\n- Christmas, holidays, and special surprises\n\n🌌 **Meet the Giggle Cosmos Crew**\n\n**Milo, Nova & Pip** are three friendly alien explorers with one big mission: discovering the universe while having fun together!\n\nAlongside their adorable cosmic animal friends, they turn every adventure into a celebration of friendship, curiosity, and imagination.\n\nTogether, they're the **SPACE SQUAD!**\n\n🎨 **Design Details**\n\nThis exclusive Giggle Cosmos illustration features a cheerful team of alien astronauts and their animal companions surrounded by colorful planets, shooting stars, and a playful spaceship.\n\nThe vibrant artwork combines whimsical cartoon characters with a magical galaxy atmosphere – perfect for kids who love imaginative adventures.\n\n💙 **Made for Little Explorers**\n\nWhether they're heading to school, enjoying a playdate, celebrating a birthday, or imagining their next intergalactic mission, this fun graphic tee adds a little cosmic magic to their day.\n\n🚀 **Join the Space Squad and let the adventure begin!**\n\n**Giggle Cosmos – Little Characters. Big Adventures.**\n\n- Soft and comfortable heavyweight fabric\n- Durable double-stitching at the neckline and sleeves for increased resilience\n- Pre-shrunk for consistent fit post-wash\n- Taped neck and shoulders for added comfort and shape retention\n- Available in a wide range of colors to suit varied preferences\n- Please note: This design includes a white background and border that will be printed and remain visible on colored T-shirts. The background is not transparent.",
+    "tags": [
+      "space squad shirt",
+      "alien kids shirt",
+      "cute alien shirt",
+      "space kids tshirt",
+      "galaxy kids shirt",
+      "astronaut kids tee",
+      "space animal shirt",
+      "alien graphic tee",
+      "kids birthday gift",
+      "space lover gift",
+      "cute space animals",
+      "boys girls tshirt",
+      "galaxy graphic tee"
+    ],
+    "isVisibleInTheOnlineStore": false,
+    "variants": [
+      {
+        "templateVariantId": "d09c5a89-ad6a-4d1a-a8e3-0247c654dac0",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "198a9354-986c-412e-a2e3-6869caab12bf",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "a0756c1b-5160-4dce-9e65-b5eb32078b23",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "04a588a0-099f-413b-a0de-b11230343fcb",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "14757dae-d7f4-442a-a4f6-fb78a780987f",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "6fec061a-5496-4d92-901a-0512a7e83b7d",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "b205b8e2-63cc-4317-b1d0-fdb2db9d42c7",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "966c062f-cc61-4e69-88cb-8cc3ce990737",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "3f1a92da-d64e-461b-80cb-bd9e224202ec",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "2b2a9dc4-fdf0-4306-ac8c-e13fc5c25e82",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "f51ded17-e9bb-43dc-a130-027a7ab52f18",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "275486a9-6cb8-42bd-85d4-b022d687f903",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "2a96a908-39b0-46e9-a37a-c44ceb8600e0",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "aa15ca58-7cff-4a91-be23-1a522e9856f6",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "266b2684-a584-4666-870b-026e31efe348",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "51b14f9b-f930-4965-8bc6-96540dd929fa",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "6ed6d4f6-2733-406e-8ea8-724fb469364a",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "e0dc508b-6a24-4698-92d5-4384e2dbd9c2",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "5adbf467-69b4-47ec-ba89-9bc3d224d00a",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "b8fd4ad4-c2d8-4157-8241-96009b892a56",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "6bfa94e4-5ed2-4587-9dbb-92de62e749bf",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "1c033376-bcd6-4c4c-a1d7-19af45ec1483",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "e4ab7f62-5506-4949-928b-affe31349404",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "af8c0741-e231-4e35-9fb9-f7c2a3bbb9cf",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "732650ca-6cff-4b02-a42e-db1a5a261972",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "162005d7-9bbf-4e9f-aa29-e50611f50a77",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "dfa91ff2-430d-436a-8326-b3d19b41cf28",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "860320c8-c43a-4a4a-a6c4-3a6bb98088a6",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "eb47e050-2ee0-42ca-a432-b1e457f30f09",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "ab4712f2-8969-4284-ac77-b2c49f3c0f49",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "84107f56-35fd-42c2-9a3e-9b3af3db8c10",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "e1ca4213-0853-4fe9-9889-8e7e48fd0450",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "3400ed87-6ff9-484c-b21a-eb19c6dd3db7",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "e2298366-c097-471d-9617-e62e70c5e72a",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "a46ac477-eeac-4200-91bd-1f609ee223b5",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "74ab0abc-3d32-45a2-b307-d942243880f1",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "80da0c7b-9448-4423-bc04-202c1edcf8c0",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "863e3cc2-085a-4c73-aa0e-8a57b47a67fe",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "f5a62f93-b1df-47b7-af98-323a224134bb",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "0289712a-bb87-4eac-b36c-276b5faaae48",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "84086e48-d84c-4924-b7a3-97bc705c5407",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "063264f2-2eed-4132-9661-71ab46daf36c",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "3721e921-5f72-4702-b2ec-3dba73db351d",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "7b6e8b09-37bd-4eb6-8b6a-977eee415b0a",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "097f05da-a0c6-42ad-956c-7023825d7cb8",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "4c219550-f152-4ee8-b8c1-d5e1f1236687",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "9c583851-f283-477d-b8f6-514700f2e0c2",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "3bce50f2-e415-40d6-8167-79325d7c5d4a",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "a2ccb7d3-ab80-41f7-85e3-3fac7bb2b62e",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "c29cc6e3-056a-417a-9dc7-70b0bd29c0eb",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "ad9c2e2b-9f94-413e-a5bb-646f799d07e7",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "cd8b2a67-5d34-44a3-b0d1-ee41c52bfebd",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "c14a3942-86a9-4442-b965-ba7b40a15432",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "234595f1-a5fe-4fb9-aa1d-1272c1dd5057",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "5fb6a75e-ae74-4513-9570-75313a50a69c",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "294e87a7-1d34-4d64-a1b3-b87ec6d67e45",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "36e1c47c-ca18-4c46-9fa9-14558a587ebf",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "c7ede162-0b04-4c6d-aa45-09faf7220f9e",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "a7e0f7db-a561-453c-bb87-45d7b3ecc86d",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "3f959251-380a-4673-a156-4444ed4a87a7",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "35993e3a-fe42-4e74-b35e-2e55f79692f7",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "1b64f41b-176c-4feb-84a9-0f44bdaee19d",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "8cda5d8a-e3d7-481d-bb76-18ee56bf18d1",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "69770b74-3ad8-42a9-a2b8-ef02dac283cd",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "2c2a9a54-648b-4466-80fc-895a3ed778ec",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "09dfdb87-4389-42be-9d34-878ce55b4197",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "3ac6b601-fe81-4b6e-a74a-b25378b0b8e4",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "a89c1a21-cd51-4abf-99e8-1c9027f4ea50",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "4369bb3f-b391-4979-8d08-f0af81343657",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "d83dcba9-5055-4511-b9b5-90c3dadcdd68",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "a418e528-1356-494e-8b98-8913cfb07838",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      },
+      {
+        "templateVariantId": "5dace103-938d-40da-8f22-6bed99fbb3e2",
+        "imagePlaceholders": [
+          {
+            "name": "artwork-prepared.png",
+            "fileUrl": "https://dl.dropboxusercontent.com/REDACTED-ARTWORK-URL",
+            "fitMethod": "meet"
+          }
+        ]
+      }
+    ]
+  }
+}

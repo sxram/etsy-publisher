@@ -1,0 +1,23 @@
+node_modules/
+
+.env
+.etsy-token.json
+
+dist/
+
+.DS_Store
+
+originals/
+digital/
+
+.idea/
+*.iml
+
+upload*/
+out/article-*/
+output/
+
+# Local Etsy shipping previews and backups
+out/shipping/
+
+out/gpsr/
