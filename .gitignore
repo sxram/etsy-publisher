@@ -1,13 +1,1 @@
-.idea/
-node_modules/
-dist/
-.env
-.env.*
-!.env.example
-*.log
-
-.private/
-
-motiv*/
-upload*/
-shirt*/
+.DS_Store
