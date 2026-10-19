@@ -6,11 +6,11 @@ import { pathToFileURL } from 'node:url';
 
 export interface ShippingInvocation { executable: string; args: string[]; cwd: string; env: NodeJS.ProcessEnv }
 export type ShippingRunner = (invocation: ShippingInvocation) => Promise<void>;
-const run: ShippingRunner = async invocation => {
+const run = async (invocation: ShippingInvocation, label = 'Etsy-Versandprüfung') => {
   await new Promise<void>((done, reject) => {
     const child = spawn(invocation.executable, invocation.args, { cwd: invocation.cwd, env: invocation.env, stdio: 'inherit' });
     child.once('error', reject);
-    child.once('exit', (code, signal) => code === 0 ? done() : reject(new Error(`Etsy-Versandprüfung fehlgeschlagen (${signal ?? code}). Hinweis oben prüfen; danach gelato:resume erneut ausführen.`)));
+    child.once('exit', (code, signal) => code === 0 ? done() : reject(new Error(`${label} fehlgeschlagen (${signal ?? code}). Hinweis oben prüfen; danach gelato:resume erneut ausführen.`)));
   });
 };
 export async function ensureEtsyShipping(listingId: string, expectedShopId = process.env.ETSY_ENABLED === 'true' ? process.env.ETSY_SHOP_ID?.trim() : undefined, runner: ShippingRunner = run, scriptPath = process.env.ETSY_SHIPPING_SCRIPT?.trim()) {
@@ -32,4 +32,31 @@ export async function ensureEtsyShipping(listingId: string, expectedShopId = pro
   }
   console.log(`Etsy-Artikel ${listingId}: Versand-Länderausschlüsse über den Etsy-Zugang in ${cwd} prüfen …`);
   await runner({ executable: process.execPath, args, cwd, env });
+}
+
+export async function ensureEtsyManufacturer(listingId: string) {
+  if (!/^[1-9]\d*$/.test(listingId)) throw new Error('Ungültige Etsy-ID.');
+  const scriptPath = process.env.ETSY_SHIPPING_SCRIPT?.trim();
+  if (!scriptPath || !isAbsolute(scriptPath) || basename(scriptPath) !== 'shipping-exclusions.ts') throw new Error('ETSY_SHIPPING_SCRIPT fehlt für GPSR-Nachbearbeitung.');
+  const cwd = dirname(dirname(resolve(scriptPath)));
+  const script = join(cwd, 'src/gpsr-manufacturer.ts');
+  await access(script);
+  const loader = createRequire(join(cwd, 'package.json')).resolve('tsx');
+  const env = { ...process.env };
+  for (const key of Object.keys(env)) if (key.startsWith('ETSY_') || key.startsWith('DOTENV_')) delete env[key];
+  env.DOTENV_CONFIG_PATH = join(cwd, '.env');
+  await run({ executable: process.execPath, args: ['--import', pathToFileURL(loader).href, script, '--listing', listingId, '--contact', resolve('.private/product-contact.json'), '--apply'], cwd, env }, 'GPSR-Herstellerprüfung');
+}
+
+export async function ensureEtsyColorMockups(listingId: string, reportFile: string) {
+  if (!/^[1-9]\d*$/.test(listingId)) throw new Error('Ungültige Etsy-ID.');
+  const helper = process.env.ETSY_SHIPPING_SCRIPT?.trim();
+  if (!helper || !isAbsolute(helper) || basename(helper) !== 'shipping-exclusions.ts') throw new Error('ETSY_SHIPPING_SCRIPT fehlt für Mockup-Upload.');
+  const cwd = dirname(dirname(resolve(helper))), script = join(cwd, 'src/color-mockup-upload.ts');
+  await access(script); await access(reportFile);
+  const loader = createRequire(join(cwd, 'package.json')).resolve('tsx');
+  const env = { ...process.env };
+  for (const key of Object.keys(env)) if (key.startsWith('ETSY_') || key.startsWith('DOTENV_')) delete env[key];
+  env.DOTENV_CONFIG_PATH = join(cwd, '.env');
+  await run({ executable: process.execPath, args: ['--import', pathToFileURL(loader).href, script, '--listing', listingId, '--report', resolve(reportFile), '--apply'], cwd, env }, 'Etsy-Farbmockup-Upload');
 }

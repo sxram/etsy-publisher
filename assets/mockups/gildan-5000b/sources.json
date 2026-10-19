@@ -1,0 +1,190 @@
+{
+  "model": "Gildan 5000B",
+  "source": "https://tshirteurope.com/en/catalog/product/gib5000",
+  "items": [
+    {
+      "color": "white",
+      "file": "front/white.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-white-a1.jpg?v=20260318154238",
+      "bytes": 29580,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "3ed964c2f60322858f212666b3cf6c7b7769e48f351943d243fbd084e045e3dd",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "black",
+      "file": "front/black.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-black-a2.jpg?v=20260318154238",
+      "bytes": 34580,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "4d6ba5d3bdfa78d3403e95d79d31483a41c0be13bca6c7ce7e8d31a297696168",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "ash_grey",
+      "file": "review/ash_grey.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-ash_grey-a2.jpg?v=20260318154238",
+      "bytes": 61836,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "6b02468494d906abf169c9036e3e6f125c43f1b3c2d6ea0bd469a40bceb980cb",
+      "status": "rejected-duplicate-of-sport-grey",
+      "placement": null
+    },
+    {
+      "color": "sport_grey",
+      "file": "front/sport_grey.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-sport_grey-a2.jpg?v=20260318154238",
+      "bytes": 61836,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "6b02468494d906abf169c9036e3e6f125c43f1b3c2d6ea0bd469a40bceb980cb",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "carolina_blue",
+      "file": "front/carolina_blue.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-carolina_blue-a2.jpg?v=20260318154238",
+      "bytes": 51707,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "05df0c33dd5681c49c541e9f05fdcd76c822b1cf84999212a8414d43579e0e9f",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "light_blue",
+      "file": "front/light_blue.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-light_blue-a2.jpg?v=20260318154238",
+      "bytes": 33091,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "53548edcba87211de8bc2bc4dea815ba8075125d3aca8db7efb8e4310929d681",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "navy",
+      "file": "front/navy.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-navy-a2.jpg?v=20260318154238",
+      "bytes": 34302,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "338e01c79b2086b734ae6f5522438709a99b859e357a5ba16e23c9f02493875c",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "purple",
+      "file": "front/purple.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-purple-a2.jpg?v=20260318154238",
+      "bytes": 42847,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "1723590cd7a9cf52318a63f0666a510822732cc96cace5a81c1b638f8f5d6186",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "forest_green",
+      "file": "front/forest_green.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-forest_green-a2.jpg?v=20260318154238",
+      "bytes": 33620,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "345c663faad7fb12503bcad0f65c1f6227cc23d9de36717334b460215067e020",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "red",
+      "file": "front/red.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-red-a2.jpg?v=20260318154238",
+      "bytes": 43272,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "cd73ab66412cb945b6cc3a2bf1e2617ffa08ba61fe8423ea8a9c3e6d61182ac5",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "azalea",
+      "file": "front/azalea.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-azalea-a2.jpg?v=20260318154238",
+      "bytes": 47250,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "958a769724c8033932cab8d6f19f08e93d69959e8041b3e7db70d1bf1a9dc9c6",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "heliconia",
+      "file": "front/heliconia.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-heliconia-a2.jpg?v=20260318154238",
+      "bytes": 34694,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "a8706dd6f65bfed3f1a542a702fab2fa95fd7c8a1be9569b0f967933386efd64",
+      "status": "candidate-front-view",
+      "placement": null
+    },
+    {
+      "color": "light_pink",
+      "file": "front/light_pink.jpg",
+      "url": "https://tshirteurope.com/img/product_images/1280/gildan/packshots/gib5000/gib5000-light_pink-a2.jpg?v=20260318154238",
+      "bytes": 30045,
+      "width": 1090,
+      "height": 1280,
+      "sha256": "c668d308d9ae3d291826ce7b9d31f21353e6429aec07ac9a526f8b061084d014",
+      "status": "candidate-front-view",
+      "placement": null
+    }
+  ],
+  "missing": [
+    "Ash (distinct verified flat image)",
+    "Dark Heather (flat image; only model photo found)"
+  ],
+  "status": "reference assets only; no Etsy publication; placement and commercial reuse not verified",
+  "additionalSources": [
+    {
+      "color": "dark_heather",
+      "url": "https://s3.us-east-005.backblazeb2.com/imtees-orders/printbere-standalone/catalog-images/80aed7e4448051ca0088a7bc43a7c33b46687d68.jpg",
+      "page": "https://printbere.com/products/gildan-5000b?color=gildan-5000b-dark-heather"
+    },
+    {
+      "color": "ash_reference",
+      "url": "https://s3.us-east-005.backblazeb2.com/imtees-orders/printbere-standalone/catalog-images/3852715532ff8f9e13628b26b401fbf67fbf2161.jpg",
+      "page": "https://printbere.com/products/gildan-5000b?color=gildan-5000b-ash"
+    }
+  ],
+  "notes": [
+    "12 flat front-view candidates downloaded; no motif placement configured.",
+    "Ash Grey download is byte-identical to Sport Grey and is excluded from front candidates.",
+    "Dark Heather and Ash photos from PrintBere are model references only, not aligned flat templates.",
+    "White has different shadows and geometry; calibrate each front image against the Gelato reference rather than copying raw pixel coordinates.",
+    "Commercial reuse permission not established from product-page availability; confirm asset licensing before publishing.",
+    "No automatic Etsy upload enabled."
+  ],
+  "gelatoColorAliases": {
+    "Hellblau": "light_blue",
+    "Sport Grey": "sport_grey",
+    "Carolina Blue": "carolina_blue",
+    "Dunkles Heidekraut": null,
+    "Forest Green": "forest_green",
+    "Heliconia": "heliconia",
+    "Lila": "purple",
+    "Ash": null,
+    "Azalee": "azalea",
+    "Weiß": "white",
+    "Hell-Pink": "light_pink",
+    "Rot": "red",
+    "Marine": "navy",
+    "Schwarz": "black"
+  }
+}

@@ -10,7 +10,7 @@ export interface GelatoPayload {
   isVisibleInTheOnlineStore: false;
   variants: Array<{ templateVariantId: string; imagePlaceholders: Array<{ name: string; fileUrl: string; fitMethod: 'meet' }> }>;
 }
-export interface GelatoProduct { id: string; status: string; externalId?: string | null }
+export interface GelatoProduct { id: string; status: string; externalId?: string | null; productVariantOptions?: Array<{ name: string; values: string[] }> }
 export class GelatoHttpError extends Error {
   constructor(public status: number, method: string, detail: string) {
     super(`Gelato ${method}: HTTP ${status}${detail ? ` – ${detail}` : ''}`);

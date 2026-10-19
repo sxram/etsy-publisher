@@ -17,7 +17,8 @@
     "gelato:preview": "node --env-file-if-exists=.env --import tsx src/gelato-folder.ts preview",
     "gelato:create": "node --env-file-if-exists=.env --import tsx src/gelato-folder.ts create",
     "gelato:resume": "node --env-file-if-exists=.env --import tsx src/gelato-folder.ts resume",
-    "dropbox:connect": "node --env-file-if-exists=.env --import tsx src/dropbox-storage.ts"
+    "dropbox:connect": "node --env-file-if-exists=.env --import tsx src/dropbox-storage.ts",
+    "gelato:mockups": "node --env-file-if-exists=.env --import tsx src/color-mockups.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.1",

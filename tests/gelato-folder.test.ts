@@ -41,6 +41,10 @@ test('folder create/resume avoids duplicates and lost-response retries', async (
   const originalFetch = globalThis.fetch;
   const originalEnv = { ...process.env };
   let posts = 0; let fail = false; let checks = 0; let shippingFails = false; let etsyId: string | undefined = '3'; let gelatoStatus = 'active';
+  let mockupChecks = 0; let mockupFails = false;
+  const checkMockups = async (_id: string, _dir: string, colors: string[]) => { assert.deepEqual(colors, ['White', 'Black']); mockupChecks++; if (mockupFails) throw new Error('mockup failed'); };
+  let manufacturerChecks = 0; let manufacturerFails = false;
+  const checkManufacturer = async (_id: string) => { manufacturerChecks++; if (manufacturerFails) throw new Error('manufacturer failed'); };
   const checkShipping = async (_id: string) => { checks++; if (shippingFails) throw new Error('shipping permission missing'); };
   Object.assign(process.env, { GELATO_API_KEY: 'test', GELATO_STORE_ID: 's1', GELATO_TEMPLATE_TSHIRT: 't1', GELATO_S3_ENDPOINT: 'https://storage.example', GELATO_S3_BUCKET: 'art', GELATO_S3_ACCESS_KEY_ID: 'test', GELATO_S3_SECRET_ACCESS_KEY: 'secret' });
   globalThis.fetch = async (url, init) => {
@@ -62,46 +66,55 @@ test('folder create/resume avoids duplicates and lost-response retries', async (
       if (fail) throw new TypeError('fetch failed');
       return Response.json({ id: 'p1', status: 'created' });
     }
-    if (address.endsWith('/products/p1')) return Response.json({ id: 'p1', status: gelatoStatus, externalId: etsyId });
+    if (address.endsWith('/products/p1')) return Response.json({ id: 'p1', status: gelatoStatus, externalId: etsyId, productVariantOptions: [{name:'Color',values:['White','Black']}] });
     throw new Error('Unexpected request');
   };
   try {
     await sharp({ create: { width: 4800, height: 1, channels: 4, background: 'red' } }).png().toFile(join(dir, 'image.png'));
     await writeFile(join(dir, 'description.md'), text);
-    await runFolder(['create', '--dir', dir], checkShipping);
+    await runFolder(['create', '--dir', dir], checkShipping, checkManufacturer, checkMockups);
     assert.equal(posts, 1);
     assert.equal(checks, 1);
+    assert.equal(manufacturerChecks, 1);
+    assert.equal(mockupChecks, 1);
+    mockupFails = true;
+    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups))?.mockupsPending, true);
+    mockupFails = false;
+    assert.equal(JSON.parse(await readFile(join(dir, 'out/gelato/state.json'), 'utf8')).entries[0].manufacturerCheck.status, 'verified');
+    manufacturerFails = true;
+    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups))?.manufacturerPending, true);
+    manufacturerFails = false;
     assert.equal(JSON.parse(await readFile(join(dir, 'out/gelato/state.json'), 'utf8')).entries[0].shippingCheck.status, 'verified');
     const saved = await readFile(join(dir, 'out/gelato/state.json'), 'utf8');
     assert.ok(!saved.includes('X-Amz'));
     shippingFails = true;
-    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping))?.shippingPending, true);
+    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups))?.shippingPending, true);
     assert.equal(JSON.parse(await readFile(join(dir, 'out/gelato/state.json'), 'utf8')).entries[0].shippingCheck.status, 'pending');
     const checksBeforeWaiting = checks; etsyId = undefined;
-    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping))?.shippingPending, true);
+    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups))?.shippingPending, true);
     assert.equal(checks, checksBeforeWaiting);
     assert.equal(JSON.parse(await readFile(join(dir, 'out/gelato/state.json'), 'utf8')).entries[0].shippingCheck.status, 'waiting_for_etsy');
     shippingFails = false; etsyId = '3';
     gelatoStatus = 'publishing';
-    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping))?.shippingPending, true);
+    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups))?.shippingPending, true);
     assert.equal(checks, checksBeforeWaiting);
     gelatoStatus = 'active';
 
-    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping))?.shippingPending, false);
+    assert.equal((await runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups))?.shippingPending, false);
     assert.equal(JSON.parse(await readFile(join(dir, 'out/gelato/state.json'), 'utf8')).entries[0].shippingCheck.status, 'verified');
     assert.equal(posts, 1);
 
-    await assert.rejects(runFolder(['create', '--dir', dir], checkShipping), /doppelte/);
-    await runFolder(['resume', '--dir', dir], checkShipping);
+    await assert.rejects(runFolder(['create', '--dir', dir], checkShipping, checkManufacturer, checkMockups), /doppelte/);
+    await runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups);
     assert.equal(posts, 1);
     await writeFile(join(dir, 'description.md'), text + ' Changed.');
-    await assert.rejects(runFolder(['resume', '--dir', dir], checkShipping), /geändert/);
+    await assert.rejects(runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups), /geändert/);
     await writeFile(join(dir, 'description.md'), text);
     await rm(join(dir, 'out/gelato/state.json'));
     fail = true;
-    await assert.rejects(runFolder(['create', '--dir', dir], checkShipping), /Verbindungsfehler/);
+    await assert.rejects(runFolder(['create', '--dir', dir], checkShipping, checkManufacturer, checkMockups), /Verbindungsfehler/);
     assert.equal(posts, 2);
-    await assert.rejects(runFolder(['resume', '--dir', dir], checkShipping), /Ungewisser/);
+    await assert.rejects(runFolder(['resume', '--dir', dir], checkShipping, checkManufacturer, checkMockups), /Ungewisser/);
     assert.equal(posts, 2);
   } finally { globalThis.fetch = originalFetch; process.env = originalEnv; await rm(dir, { recursive: true, force: true }); }
 });

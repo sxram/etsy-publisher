@@ -6,16 +6,17 @@ import { appendDescriptionDefaults, makeProfileTitle, readProductFolder } from '
 import { GelatoApiClient, GelatoHttpError, buildGelatoPayload, completeEtsySizeGrid } from './clients/gelato.js';
 import { analyzeArtwork, prepareArtwork, WHITE_PRINT_NOTICE } from './prepare-artwork.js';
 import { validateStorage, uploadArtwork } from './artwork-storage.js';
-import { ensureEtsyShipping } from './etsy-shipping.js';
+import { ensureEtsyShipping, ensureEtsyManufacturer } from './etsy-shipping.js';
+import { ensureProductColorMockups } from './product-color-mockups.js';
 
-interface Profile { templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string; etsyTaxonomyId?: number; etsySection?: string; etsyProductionProcessRequested?: string }
-interface Entry { profile: string; templateId: string; placeholder: string; status: string; productId?: string; externalId?: string | null; shippingCheck?: { status: 'pending' | 'waiting_for_etsy' | 'verified'; checkedAt?: string; message?: string } }
+interface Profile { colorMockupModel?: string; templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string; etsyTaxonomyId?: number; etsySection?: string; etsyProductionProcessRequested?: string }
+interface Entry { profile: string; templateId: string; placeholder: string; status: string; productId?: string; externalId?: string | null; mockupCheck?: { status: 'pending' | 'verified' | 'waiting_for_etsy'; message?: string }; manufacturerCheck?: { status: 'pending' | 'verified'; message?: string }; shippingCheck?: { status: 'pending' | 'waiting_for_etsy' | 'verified'; checkedAt?: string; message?: string } }
 interface State { fingerprint: string; storeId: string; entries: Entry[] }
 async function optionalState(path: string): Promise<State | undefined> {
   try { return JSON.parse(await readFile(path, 'utf8')) as State; }
   catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
 }
-export async function runFolder(args = process.argv.slice(2), shippingCheck: (listingId: string) => Promise<void> = ensureEtsyShipping) {
+export async function runFolder(args = process.argv.slice(2), shippingCheck: (listingId: string) => Promise<void> = ensureEtsyShipping, manufacturerCheck: (listingId: string) => Promise<void> = ensureEtsyManufacturer, mockupCheck: (listingId: string, folder: string, colors: string[]) => Promise<void> = ensureProductColorMockups) {
   const command = args[0];
   if (!['preview', 'create', 'resume'].includes(command ?? '')) throw new Error('Aufruf: npm run gelato:preview|gelato:create|gelato:resume -- --dir ./motiv [--products tshirt]');
   const option = (name: string) => { const index = args.indexOf(name); const value = index >= 0 ? args[index + 1] : undefined; if (index >= 0 && (!value || value.startsWith('--'))) throw new Error(`Wert für ${name} fehlt.`); return value; };
@@ -45,7 +46,7 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
     },
     returnPolicy: { status: 'manual-review-required', documents: 'docs/shop-policies/', note: '30-Tage-Rückgabe und Rechtstexte im Etsy-Shop hinterlegen; keine automatische Veröffentlichung.' },
     shipping: { status: 'automatic-check-pending', note: 'Nach Gelato-Übertragung zu Etsy werden die Versand-Länderausschlüsse automatisch geprüft. Bei noch fehlender Etsy-ID oder Fehlern mit gelato:resume fortsetzen; nicht ungeprüft veröffentlichen.' },
-    gpsr: { status: 'manual-review-required', note: 'Herstellerrolle und Produktunterlagen klären. Shop-Kontakt ist nicht automatisch Hersteller oder EU-verantwortliche Person.' },
+    gpsr: { status: 'manufacturer-description-check-pending', note: 'Herstellerdaten werden nach Etsy-Übertragung automatisch in der Beschreibung ergänzt. Separate GPSR-Editorfelder werden nicht per API gesetzt. Produktsicherheit bleibt manuell zu prüfen.' },
   }));
   await writeFile(join(out, 'etsy-manual-checks.json'), JSON.stringify(manualChecks, null, 2) + '\n');
   for (const check of manualChecks) if (check.productionProcess.requestedDefault) console.log(`${check.profile}: Etsy-Herstellungsangabe manuell prüfen: "${check.productionProcess.requestedDefault}". Nicht per API gesetzt. Details: ${join(out, 'etsy-manual-checks.json')}`);
@@ -134,6 +135,35 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
         }
         console.log('Im Etsy-Editor noch prüfen: Wie stellt dein Shop diesen Artikel her? sowie GPSR-Hersteller/Sicherheitsinformationen.');
       }
+      if (entry.externalId && entry.status === 'active') {
+        entry.manufacturerCheck = { status: 'pending' }; await save();
+        try {
+          await manufacturerCheck(String(entry.externalId));
+          entry.manufacturerCheck = { status: 'verified' };
+          console.log('GPSR-Herstellerkontakt in Etsy-Beschreibung bestätigt. Separate GPSR-Felder und Produktsicherheit manuell prüfen.');
+        } catch (error) {
+          entry.manufacturerCheck = { status: 'pending', message: error instanceof Error ? error.message : 'GPSR-Fehler' };
+          console.error(`GPSR-HERSTELLERANGABEN OFFEN: ${entry.manufacturerCheck.message}. Mit gelato:resume erneut versuchen.`);
+        }
+        await save();
+      }
+      if (profiles[entry.profile]!.colorMockupModel) {
+        entry.mockupCheck = { status: entry.externalId && entry.status === 'active' ? 'pending' : 'waiting_for_etsy' }; await save();
+        if (entry.externalId && entry.status === 'active') {
+          try {
+            if (profiles[entry.profile]!.colorMockupModel !== 'gildan-5000b') throw new Error('Unbekanntes Mockup-Modell.');
+            const colorOptions = product.productVariantOptions?.filter(option => /^(color|colour|farbe)$/i.test(option.name.trim()));
+            if (!colorOptions || colorOptions.length !== 1 || !colorOptions[0]!.values.length) throw new Error('Gelato liefert keine eindeutige Farbauswahl. Keine Farbmockups hochgeladen.');
+            await mockupCheck(String(entry.externalId), dir, colorOptions[0]!.values);
+            entry.mockupCheck = { status: 'verified' };
+            console.log('Etsy-Farbübersichten ergänzt bzw. bereits vorhanden. Ursprüngliche Mockups bleiben erhalten.');
+          } catch (error) {
+            entry.mockupCheck = { status: 'pending', message: error instanceof Error ? error.message : 'Mockup-Fehler' };
+            console.error(`FARBMOCKUPS OFFEN: ${entry.mockupCheck.message}. Mit gelato:resume fortsetzen.`);
+          }
+          await save();
+        } else console.log('Farbmockups warten auf die fertige Etsy-Übertragung. Mit gelato:resume fortsetzen.');
+      }
       // Separate from draft finishing: shipping must also be checked when a listing is already active,
       // or when the optional category/description finishing step cannot run.
       const shippingReady = !!entry.externalId && entry.status === 'active';
@@ -157,8 +187,12 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
       if (entry.status === 'publishing_error') throw new Error('Gelato meldet einen Übertragungsfehler. Details im Dashboard prüfen.');
     }
     const shippingPending = state.entries.some(e => e.shippingCheck?.status !== 'verified');
+    const manufacturerPending = state.entries.some(e => e.manufacturerCheck?.status !== 'verified');
+    if (manufacturerPending) console.error('Noch offen: GPSR-Herstellerkontakt nicht bestätigt. Mit gelato:resume fortsetzen.');
     console.log(shippingPending ? 'Noch nicht fertig: Etsy-Versandprüfung offen. Mit gelato:resume fortsetzen.' : 'Etsy-Versandprüfung abgeschlossen. Weitere manuelle Etsy-Angaben und Entwurfsstatus im Shop prüfen.');
-    return { shippingPending };
+    const mockupsPending = state.entries.some(e => !!profiles[e.profile]!.colorMockupModel && e.mockupCheck?.status !== 'verified');
+    if (mockupsPending) console.error('Noch offen: Etsy-Farbübersichten. Mit gelato:resume fortsetzen.');
+    return { shippingPending, manufacturerPending, mockupsPending };
   } finally { await lock.close(); await unlink(lockPath); }
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) runFolder().then(result => { if (result?.shippingPending) process.exitCode = 1; }).catch(error => { console.error(error instanceof Error ? error.message : 'Fehler'); process.exitCode = 1; });
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) runFolder().then(result => { if (result?.shippingPending || result?.manufacturerPending || result?.mockupsPending) process.exitCode = 1; }).catch(error => { console.error(error instanceof Error ? error.message : 'Fehler'); process.exitCode = 1; });

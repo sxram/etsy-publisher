@@ -1,0 +1,136 @@
+{
+  "model": "Gildan 5000B",
+  "reviewStatus": "approved-by-user",
+  "reference": {
+    "listingId": "4597600781",
+    "imageId": "8698337268",
+    "file": "reference-etsy.jpg",
+    "artworkWidth": 3041,
+    "artworkHeight": 3800,
+    "imageWidth": 2000,
+    "imageHeight": 2000,
+    "printRect": {
+      "left": 689,
+      "top": 443,
+      "width": 619,
+      "height": 773
+    },
+    "torsoCenterX": 1000,
+    "torsoWidth": 1000,
+    "neckBottomY": 280
+  },
+  "placements": {
+    "white": {
+      "file": "front/white.jpg",
+      "sha256": "3ed964c2f60322858f212666b3cf6c7b7769e48f351943d243fbd084e045e3dd",
+      "label": "White",
+      "left": 365,
+      "top": 442,
+      "width": 348,
+      "height": 435
+    },
+    "black": {
+      "file": "front/black.jpg",
+      "sha256": "4d6ba5d3bdfa78d3403e95d79d31483a41c0be13bca6c7ce7e8d31a297696168",
+      "label": "Black",
+      "left": 382,
+      "top": 451,
+      "width": 326,
+      "height": 407
+    },
+    "sport_grey": {
+      "file": "front/sport_grey.jpg",
+      "sha256": "6b02468494d906abf169c9036e3e6f125c43f1b3c2d6ea0bd469a40bceb980cb",
+      "label": "Sport Grey",
+      "left": 387,
+      "top": 431,
+      "width": 325,
+      "height": 406
+    },
+    "carolina_blue": {
+      "file": "front/carolina_blue.jpg",
+      "sha256": "05df0c33dd5681c49c541e9f05fdcd76c822b1cf84999212a8414d43579e0e9f",
+      "label": "Carolina Blue",
+      "left": 382,
+      "top": 451,
+      "width": 326,
+      "height": 407
+    },
+    "light_blue": {
+      "file": "front/light_blue.jpg",
+      "sha256": "53548edcba87211de8bc2bc4dea815ba8075125d3aca8db7efb8e4310929d681",
+      "label": "Light Blue",
+      "left": 374,
+      "top": 437,
+      "width": 330,
+      "height": 412
+    },
+    "navy": {
+      "file": "front/navy.jpg",
+      "sha256": "338e01c79b2086b734ae6f5522438709a99b859e357a5ba16e23c9f02493875c",
+      "label": "Navy",
+      "left": 382,
+      "top": 451,
+      "width": 326,
+      "height": 407
+    },
+    "purple": {
+      "file": "front/purple.jpg",
+      "sha256": "1723590cd7a9cf52318a63f0666a510822732cc96cace5a81c1b638f8f5d6186",
+      "label": "Purple",
+      "left": 387,
+      "top": 431,
+      "width": 325,
+      "height": 406
+    },
+    "forest_green": {
+      "file": "front/forest_green.jpg",
+      "sha256": "345c663faad7fb12503bcad0f65c1f6227cc23d9de36717334b460215067e020",
+      "label": "Forest Green",
+      "left": 387,
+      "top": 431,
+      "width": 325,
+      "height": 406
+    },
+    "red": {
+      "file": "front/red.jpg",
+      "sha256": "cd73ab66412cb945b6cc3a2bf1e2617ffa08ba61fe8423ea8a9c3e6d61182ac5",
+      "label": "Red",
+      "left": 375,
+      "top": 434,
+      "width": 338,
+      "height": 422
+    },
+    "azalea": {
+      "file": "front/azalea.jpg",
+      "sha256": "958a769724c8033932cab8d6f19f08e93d69959e8041b3e7db70d1bf1a9dc9c6",
+      "label": "Azalea",
+      "left": 375,
+      "top": 434,
+      "width": 338,
+      "height": 422
+    },
+    "heliconia": {
+      "file": "front/heliconia.jpg",
+      "sha256": "a8706dd6f65bfed3f1a542a702fab2fa95fd7c8a1be9569b0f967933386efd64",
+      "label": "Heliconia",
+      "left": 373,
+      "top": 439,
+      "width": 339,
+      "height": 423
+    },
+    "light_pink": {
+      "file": "front/light_pink.jpg",
+      "sha256": "c668d308d9ae3d291826ce7b9d31f21353e6429aec07ac9a526f8b061084d014",
+      "label": "Light Pink",
+      "left": 387,
+      "top": 431,
+      "width": 325,
+      "height": 406
+    }
+  },
+  "missing": [
+    "ash",
+    "dark_heather"
+  ]
+}
