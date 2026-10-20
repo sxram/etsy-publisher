@@ -1,3 +1,4 @@
+import { preparePosterArtwork, posterSize, validatePosterTemplate } from './poster-artwork.js';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
@@ -6,10 +7,10 @@ import { appendDescriptionDefaults, makeProfileTitle, readProductFolder } from '
 import { GelatoApiClient, GelatoHttpError, buildGelatoPayload, completeEtsySizeGrid } from './clients/gelato.js';
 import { analyzeArtwork, prepareArtwork, WHITE_PRINT_NOTICE } from './prepare-artwork.js';
 import { validateStorage, uploadArtwork } from './artwork-storage.js';
-import { ensureEtsyShipping, ensureEtsyManufacturer } from './etsy-shipping.js';
+import { ensureEtsyShipping, ensureEtsyManufacturer, ensureEtsyPosterMockups } from './etsy-shipping.js';
 import { ensureProductColorMockups } from './product-color-mockups.js';
 
-interface Profile { colorMockupModel?: string; templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string; etsyTaxonomyId?: number; etsySection?: string; etsyProductionProcessRequested?: string }
+interface Profile { kind?: string; templateId?: string; colorMockupModel?: string; templateIdEnv: string; placeholder: string; descriptionDefaults?: string[]; titleSuffix?: string; etsyTaxonomyId?: number; etsySection?: string; etsyProductionProcessRequested?: string }
 interface Entry { profile: string; templateId: string; placeholder: string; status: string; productId?: string; externalId?: string | null; mockupCheck?: { status: 'pending' | 'verified' | 'waiting_for_etsy'; message?: string }; manufacturerCheck?: { status: 'pending' | 'verified'; message?: string }; shippingCheck?: { status: 'pending' | 'waiting_for_etsy' | 'verified'; checkedAt?: string; message?: string } }
 interface State { fingerprint: string; storeId: string; entries: Entry[] }
 async function optionalState(path: string): Promise<State | undefined> {
@@ -26,14 +27,15 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
   const input = await readProductFolder(dir);
   const artwork = await analyzeArtwork(input.image);
   const profiles = JSON.parse(await readFile(resolve('config/gelato-products.json'), 'utf8')) as Record<string, Profile>;
-  const selected = [...new Set((option('--products') || 'tshirt').split(',').map(x => x.trim()).filter(Boolean))];
+  const savedState = command === 'resume' ? await optionalState(join(dir, 'out', 'gelato', 'state.json')) : undefined;
+  const selected = [...new Set((option('--products') || savedState?.entries.map(entry => entry.profile).join(',') || 'tshirt').split(',').map(x => x.trim()).filter(Boolean))];
   if (!selected.length) throw new Error('Mindestens ein Produktprofil erforderlich.');
   const entries: Entry[] = selected.map(name => {
     const p = profiles[name];
     if (!p?.templateIdEnv || !p.placeholder) throw new Error(`Produktprofil ${name} fehlt oder ist unvollständig.`);
-    return { profile: name, templateId: process.env[p.templateIdEnv]?.trim() || '', placeholder: p.placeholder, status: 'planned' };
+    return { profile: name, templateId: process.env[p.templateIdEnv]?.trim() || p.templateId || '', placeholder: p.placeholder, status: 'planned' };
   });
-  const metadataFor = (profile: string) => ({ ...input.metadata, title: makeProfileTitle(input.metadata.title, profiles[profile]!.titleSuffix), description: appendDescriptionDefaults(input.metadata.description, [...(profiles[profile]!.descriptionDefaults ?? []), ...(!artwork.rectangular ? [WHITE_PRINT_NOTICE] : [])]) });
+  const metadataFor = (profile: string) => ({ ...input.metadata, title: makeProfileTitle(input.metadata.title, profiles[profile]!.titleSuffix), description: appendDescriptionDefaults(input.metadata.description, [...(profiles[profile]!.descriptionDefaults ?? []), ...(profiles[profile]!.kind !== 'poster' && !artwork.rectangular ? [WHITE_PRINT_NOTICE] : [])]) });
   const out = join(dir, 'out', 'gelato');
   await mkdir(out, { recursive: true });
   const manualChecks = entries.map(entry => ({
@@ -54,11 +56,12 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
   const preparedImage = join(out, 'artwork-prepared.png');
   const statePath = join(out, 'state.json');
   const storeId = process.env.GELATO_STORE_ID?.trim() || '';
-  const fingerprint = createHash('sha256').update(input.bytes).update(JSON.stringify({ metadata: input.metadata, artworkProcessing: 'all-colors-no-crop-white-notice-long3800-max10mb-v9', storeId, entries: entries.map(({ profile, templateId, placeholder }) => ({ profile, templateId, placeholder, title: metadataFor(profile).title, description: metadataFor(profile).description })) })).digest('hex');
+  const fingerprint = createHash('sha256').update(input.bytes).update(JSON.stringify({ metadata: input.metadata, artworkProcessing: selected.includes('poster') ? 'poster-3sizes-jpg300-v1' : 'all-colors-no-crop-white-notice-long3800-max10mb-v9', storeId, entries: entries.map(({ profile, templateId, placeholder }) => ({ profile, templateId, placeholder, title: metadataFor(profile).title, description: metadataFor(profile).description })) })).digest('hex');
   const previous = await optionalState(statePath);
   if (command === 'preview') {
-    Object.assign(artwork, await prepareArtwork(input.image, preparedImage));
-    const plan = { ...input.metadata, image: preparedImage, originalImage: input.image, artwork, profiles: entries.map(entry => ({ ...entry, title: metadataFor(entry.profile).title, description: metadataFor(entry.profile).description })), visibility: 'hidden / Etsy draft requested', missingConfiguration: [...(!storeId ? ['GELATO_STORE_ID'] : []), ...entries.filter(e => !e.templateId).map(e => profiles[e.profile]!.templateIdEnv)] };
+    const posters = selected.includes('poster') ? await preparePosterArtwork(input.image, join(out, 'posters')) : undefined;
+    if (selected.some(name => profiles[name]!.kind !== 'poster')) Object.assign(artwork, await prepareArtwork(input.image, preparedImage));
+    const plan = { posterFiles: posters, ...input.metadata, image: preparedImage, originalImage: input.image, artwork, profiles: entries.map(entry => ({ ...entry, title: metadataFor(entry.profile).title, description: metadataFor(entry.profile).description })), visibility: 'hidden / Etsy draft requested', missingConfiguration: [...(!storeId ? ['GELATO_STORE_ID'] : []), ...entries.filter(e => !e.templateId).map(e => profiles[e.profile]!.templateIdEnv)] };
     await writeFile(join(out, 'preview.json'), JSON.stringify(plan, null, 2) + '\n');
     console.log(JSON.stringify(plan, null, 2));
     console.log('Nur lokale Vorschau. Kein Gelato-Produkt angelegt.');
@@ -80,11 +83,14 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
     console.log("Speicherzugang und Gelato-Vorlage prüfen …");
     await validateStorage();
     for (const entry of pending) {
-      const selection = completeEtsySizeGrid(await client.getTemplate(entry.templateId));
+      const fetched = await client.getTemplate(entry.templateId);
+      const isPoster = profiles[entry.profile]!.kind === 'poster';
+      if (isPoster) validatePosterTemplate(fetched);
+      const selection = isPoster ? { template: fetched, removedSizes: [] } : completeEtsySizeGrid(fetched);
       const template = selection.template;
       if (selection.removedSizes.length) console.log(`Alle Vorlagenfarben bleiben erhalten. Nicht in allen Farben verfügbare Größen entfallen: ${selection.removedSizes.join(', ')}. ${template.variants.length} vollständige Kombinationen.`);
       if (template.id !== entry.templateId) throw new Error('Gelato hat eine unerwartete Vorlage zurückgegeben.');
-      buildGelatoPayload(template, metadataFor(entry.profile), 'https://example.invalid/preflight.png', entry.placeholder);
+      buildGelatoPayload(template, metadataFor(entry.profile), 'https://example.invalid/preflight.png', entry.placeholder, isPoster ? v => ({ url: 'https://example.invalid/preflight.jpg', placeholder: v.imagePlaceholders[0]!.name }) : undefined);
       templates.set(entry.profile, template);
     }
   }
@@ -97,17 +103,22 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
     if (JSON.stringify(latest) !== JSON.stringify(previous)) throw new Error('Auftragsstatus inzwischen geändert. Erneut aufrufen.');
     if (pending.length) {
       console.log("Druckbild vorbereiten und komprimieren …");
-      await prepareArtwork(input.image, preparedImage);
+      if (pending.some(e => profiles[e.profile]!.kind !== 'poster')) await prepareArtwork(input.image, preparedImage);
       console.log("Bild zum konfigurierten Speicher hochladen und Downloadlink erzeugen …");
     }
-    const artworkUrl = pending.length ? await uploadArtwork(preparedImage) : undefined;
+    const artworkUrl = pending.some(e => profiles[e.profile]!.kind !== 'poster') ? await uploadArtwork(preparedImage) : undefined;
+    const posterUrls: Record<string,string> = {};
+    if (pending.some(e => profiles[e.profile]!.kind === 'poster')) {
+      const files = await preparePosterArtwork(input.image, join(out, 'posters'));
+      for (const [size, file] of Object.entries(files)) posterUrls[size] = await uploadArtwork(file);
+    }
     if (pending.length) console.log("Bild-Upload abgeschlossen.");
     if (!previous) await save();
     for (const entry of state.entries) {
       if (!entry.productId) {
         entry.status = 'creating'; await save();
         console.log(`${entry.profile}: Produkt bei Gelato anlegen (Antwort kann bis zu 120 Sekunden dauern) …`);
-        const result = await client.createFromTemplate(buildGelatoPayload(templates.get(entry.profile)!, metadataFor(entry.profile), artworkUrl!, entry.placeholder)).catch(async error => {
+        const result = await client.createFromTemplate(buildGelatoPayload(templates.get(entry.profile)!, metadataFor(entry.profile), artworkUrl ?? '', entry.placeholder, profiles[entry.profile]!.kind === 'poster' ? v => ({ url: posterUrls[posterSize(v)]!, placeholder: v.imagePlaceholders[0]!.name }) : undefined)).catch(async error => {
           if (error instanceof GelatoHttpError && [400, 401, 403, 404, 422].includes(error.status)) {
             entry.status = 'rejected'; await save();
           }
@@ -134,6 +145,14 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
           console.log(`Etsy-Nachbearbeitung offen: ${error instanceof Error ? error.message : 'Fehler'}. Nach Behebung gelato:resume erneut ausführen.`);
         }
         console.log('Im Etsy-Editor noch prüfen: Wie stellt dein Shop diesen Artikel her? sowie GPSR-Hersteller/Sicherheitsinformationen.');
+      }
+      if (profiles[entry.profile]!.kind === 'poster') {
+        entry.mockupCheck = { status: entry.externalId && entry.status === 'active' ? 'pending' : 'waiting_for_etsy' }; await save();
+        if (entry.externalId && entry.status === 'active') {
+          try { await ensureEtsyPosterMockups(String(entry.externalId), dir, metadataFor(entry.profile).description); entry.mockupCheck = { status: 'verified' }; }
+          catch (error) { entry.mockupCheck = { status: 'pending', message: error instanceof Error ? error.message : 'Poster-Mockup-Fehler' }; console.error(`POSTER-NACHBEARBEITUNG OFFEN: ${entry.mockupCheck.message}`); }
+          await save();
+        }
       }
       if (entry.externalId && entry.status === 'active') {
         entry.manufacturerCheck = { status: 'pending' }; await save();
@@ -190,8 +209,8 @@ export async function runFolder(args = process.argv.slice(2), shippingCheck: (li
     const manufacturerPending = state.entries.some(e => e.manufacturerCheck?.status !== 'verified');
     if (manufacturerPending) console.error('Noch offen: GPSR-Herstellerkontakt nicht bestätigt. Mit gelato:resume fortsetzen.');
     console.log(shippingPending ? 'Noch nicht fertig: Etsy-Versandprüfung offen. Mit gelato:resume fortsetzen.' : 'Etsy-Versandprüfung abgeschlossen. Weitere manuelle Etsy-Angaben und Entwurfsstatus im Shop prüfen.');
-    const mockupsPending = state.entries.some(e => !!profiles[e.profile]!.colorMockupModel && e.mockupCheck?.status !== 'verified');
-    if (mockupsPending) console.error('Noch offen: Etsy-Farbübersichten. Mit gelato:resume fortsetzen.');
+    const mockupsPending = state.entries.some(e => (!!profiles[e.profile]!.colorMockupModel || profiles[e.profile]!.kind === 'poster') && e.mockupCheck?.status !== 'verified');
+    if (mockupsPending) console.error('Noch offen: Etsy-Mockup-Nachbearbeitung. Mit gelato:resume fortsetzen.');
     return { shippingPending, manufacturerPending, mockupsPending };
   } finally { await lock.close(); await unlink(lockPath); }
 }

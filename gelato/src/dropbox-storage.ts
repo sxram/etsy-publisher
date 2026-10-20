@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { mkdir, readFile, writeFile, chmod, rename } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, resolve, extname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createInterface } from 'node:readline/promises';
 
@@ -52,7 +52,9 @@ export function dropboxDownloadUrl(link: string) {
 }
 export async function uploadDropbox(path: string): Promise<string> {
   const bytes = await readFile(path);
-  const filePath = `/${createHash('sha256').update(bytes).digest('hex')}.png`;
+  const extension = extname(path).toLowerCase() === '.jpg' || extname(path).toLowerCase() === '.jpeg' ? '.jpg' : '.png';
+  const contentType = extension === '.jpg' ? 'image/jpeg' : 'image/png';
+  const filePath = `/${createHash('sha256').update(bytes).digest('hex')}${extension}`;
   const token = await accessToken();
   const rpc = async (route: string, body: unknown) => {
     try { return await fetch(`https://api.dropboxapi.com/2/${route}`, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(60_000) }); }
@@ -81,7 +83,7 @@ export async function uploadDropbox(path: string): Promise<string> {
   let downloaded: Response;
   try { downloaded = await fetch(direct, { redirect: 'error', signal: AbortSignal.timeout(60_000) }); }
   catch { throw new Error('Dropbox-Druckbild ist nicht direkt ohne Weiterleitung abrufbar. Gelato-Aufruf gestoppt.'); }
-  if (!downloaded.ok || !downloaded.headers.get('content-type')?.toLowerCase().startsWith('image/png')) throw new Error(`Dropbox-Druckbild liefert keine PNG (HTTP ${downloaded.status}). Gelato-Aufruf gestoppt.`);
+  if (!downloaded.ok || !downloaded.headers.get('content-type')?.toLowerCase().startsWith(contentType)) throw new Error(`Dropbox-Druckbild liefert nicht den erwarteten Bildtyp (HTTP ${downloaded.status}). Gelato-Aufruf gestoppt.`);
   if (!Buffer.from(await downloaded.arrayBuffer()).equals(bytes)) throw new Error('Dropbox-Download stimmt nicht mit der Druckdatei überein. Gelato-Aufruf gestoppt.');
   return direct;
 }

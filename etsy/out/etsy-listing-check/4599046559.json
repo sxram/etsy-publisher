@@ -1,0 +1,14 @@
+{
+  "listingId": 4599046559,
+  "shopId": 68057917,
+  "title": "Cute Animal Nursery Wall Art – Rainbow Cloud Poster with Capybara | Axolotl | Cat | Otter & Red Panda | Giggle Critters Kids Room Decor",
+  "state": "draft",
+  "listingType": "physical",
+  "productionPartners": [],
+  "editorFields": {"gpsr": "not_read", "tools": "not_read", "manufacturingMethod": "not_read"},
+  "confirmedChanges": [],
+  "status": "incomplete",
+  "blocker": "Safari computer-control runtime failed to start twice, including after reset: No such file or directory (os error 2).",
+  "openPoints": ["Inspect all three editor fields in Safari", "Gelato production partner is not assigned in Etsy API response"],
+  "preserveDraft": true
+}

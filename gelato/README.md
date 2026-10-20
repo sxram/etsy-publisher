@@ -1,3 +1,32 @@
+# Aktueller Stand und Repository-Struktur
+
+- `gelato/`: Gelato-Erstellung, Druckdateien, Dropbox/S3, Etsy-Nachbearbeitung.
+- `etsy/`: Etsy-Zugang und gemeinsame Scripts für Versand, Wasserzeichen und Poster-Mockups.
+- Befehle unten aus `gelato/` ausführen. Beide Ordner benötigen ihre npm-Abhängigkeiten und eigene `.env`/OAuth-Dateien.
+- Lokale Shirt-Erstellung funktioniert einschließlich Farbübersichten. Chat-Anbindung: MCP-Grundgerüst vorhanden; Gelato-Tools, Remote-Anmeldung, Hosting und vollständiger Chat-Test fehlen noch. Der Ordner-Ablauf läuft unabhängig vom MCP-Server.
+- Etsy-Hilfsscripts werden standardmäßig im benachbarten `../etsy/` gesucht. Ein vorhandenes `ETSY_SHIPPING_SCRIPT` überschreibt das: nach dem Umzug entfernen oder auf den neuen absoluten Pfad ändern.
+
+## Physische Poster aus Gelato-Vorlage
+
+Vorlage: `c8f1c3d9-e4c1-44ce-b655-9fb8b8b1c818`; optional über `GELATO_TEMPLATE_POSTER` überschreibbar. Genau drei Hochformat-Varianten mit Größenangabe in den `variantOptions`: 30x40, 45x60, 60x80 cm; genau ein Bildplatzhalter pro Variante. Verkaufspreise und ursprüngliche Gelato-Mockups stammen aus der gespeicherten Vorlage.
+
+```sh
+npm run gelato:poster:preview -- --dir ./mein_poster
+npm run gelato:poster:create -- --dir ./mein_poster
+npm run gelato:poster:resume -- --dir ./mein_poster
+```
+
+- Eingabe: genau ein JPG/PNG und eine TXT/MD mit Title, Tags und Beschreibung, wie bei Shirts.
+- Motiv muss 3:4-Hochformat haben; andere Seitenverhältnisse werden vor Upload abgewiesen. Kein stiller Beschnitt.
+- Drei JPG-Druckdateien mit 300 dpi unter `out/gelato/posters/`: 3543×4724, 5315×7087 und 7087×9449 Pixel. Lanczos-Vergrößerung und leichte Schärfung; Hochskalierung erfindet keine Originaldetails.
+- Jede Größenvariante erhält die passende eigene Datei; Upload über denselben Dropbox-/S3-Zugang.
+- Nach fertiger Etsy-Übertragung startet automatisch `../etsy/src/process-article.ts`: Versand prüfen, bestehende Etsy-Bilder mit Wasserzeichen versehen und erstes Bild als Rahmen-Mockup aufbereiten. Das Script verarbeitet das von Gelato gelieferte erste Bild; dieses muss in der Vorlage ein geeignetes frontales Poster-Mockup sein.
+- Die Etsy-Shop-Abteilung **Poster** muss existieren. Physische Entwürfe werden vor der Nachbearbeitung automatisch zugeordnet; bei bereits veröffentlichten Artikeln wird eine falsche Abteilung zur manuellen Korrektur gemeldet. Keine automatische Änderung einer unbekannten Kategorie.
+- Bei asynchroner Übertragung oder Fehlern denselben Resume-Befehl verwenden. Fortschritt/Backups unter `out/gelato/` und `out/etsy-poster/` aufbewahren. Keine automatische Veröffentlichung.
+- Vorschau bleibt vollständig lokal. Die neue Vorlage muss beim ersten echten Lauf geprüft werden; unbekannte Variantenbezeichnungen führen zu einem erklärten Abbruch vor Erstellung.
+
+---
+
 # Giggle Publisher
 
 Minimaler TypeScript-/Node.js-Remote-MCP-Server als Grundlage für ein persönliches
@@ -163,8 +192,7 @@ Vor privatem Remote-Zugriff sind MCP-OAuth und Benutzerzuordnung erforderlich.
 Etsy-OAuth erteilt nur dem Server Zugriff auf Etsy und ist eine getrennte Anmeldung.
 
 `.env.example` enthält nur Platzhalter. `ALLOWED_ORIGINS` enthält exakte Browser-
-Origins; `ALLOWED_HOSTS` explizite Hostnamen ohne Port. Schreibaktionen und Gelato
-bleiben spätere Erweiterungen (siehe `src/tools/README.md`).
+Origins; `ALLOWED_HOSTS` explizite Hostnamen ohne Port. Gelato-Schreibaktionen sind im lokalen Ordner-Ablauf umgesetzt, aber noch nicht als MCP-Tools registriert (siehe `src/tools/README.md`).
 
 Die Etsy-Verbindung ist mit simulierten Anbieterantworten getestet. Eine echte
 Shop-Freigabe und Live-Abfrage benötigen deine Zugangsdaten und Browser-Zustimmung.
@@ -290,3 +318,7 @@ Der Upload nutzt den vorhandenen Etsy-Zugang des Versand-Hilfsprojekts, erhält 
 Die bestätigte Platzierung steht in `assets/mockups/gildan-5000b/calibration.json`. Die Vorschau allein bleibt lokal: `npm run gelato:mockups -- --dir ./motiv`. Danach erfolgt der Upload mit `npm run gelato:resume -- --dir ./motiv`. Offene Schritte werden in `out/gelato/state.json` unter `mockupCheck` gespeichert und führen zu Exitstatus 1. Die vorhandene Gelato-Erstellung bleibt vor Duplikaten geschützt.
 
 Weiße Shirts bleiben als separates ursprüngliches Mockup erhalten. Die Farbübersichten schließen Weiß aus und enthalten bis zu sechs farbige Shirts pro Seite (aktuell 6 + 5). Bereits hochgeladene eigene Übersichten können bei unverändertem Motiv mit dem Hilfsbefehl `mockups:upload ... --apply --refresh-managed` gezielt an ihren bisherigen Rängen ersetzt werden. Dafür müssen IDs und Marker exakt zum Uploadjournal passen; Originalbilder werden weiterhin geschützt.
+
+Die Vorlage wurde am 20. Oktober 2026 lesend geprüft: alle drei Größen vorhanden, aber je zwei Bildplatzhalter (`Image 3` und `whimsical_moonlit_village_canal_300dpi.png`). Vor Erstellung auf genau einen Motiv-Platzhalter je Variante reduzieren und speichern. Der Ablauf hält bis dahin vor Upload/Erstellung an.
+
+Poster-Beschreibungen werden nach fertiger Etsy-Übertragung direkt mit den ursprünglichen Leerzeilen korrigiert, auch bei `gelato:poster:resume`. Ein vorhandener GPSR-Block bleibt erhalten. Bei inhaltlich abweichendem Etsy-Text stoppt die Korrektur, um manuelle Änderungen zu schützen. Der Artikelstatus bleibt unverändert. Gelato erhält weiterhin HTML-Absätze; die nachträgliche Korrektur betrifft Etsy.

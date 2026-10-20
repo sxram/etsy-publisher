@@ -1,4 +1,4 @@
 interface:
   display_name: "Etsy-Artikel prüfen"
-  short_description: "GPSR, Werkzeuge und Herstellung im Etsy-Shop prüfen"
-  default_prompt: "Nutze $etsy-listing-check: Prüfe alle meine Etsy-Artikel in Safari, ergänze fehlende bestätigte GPSR-, Werkzeug- und Herstellungsangaben und veröffentliche die Korrekturen an aktiven Artikeln. Entwürfe bleiben Entwürfe."
+  short_description: "Einen Artikel per ID oder alle Etsy-Artikel prüfen"
+  default_prompt: "Nutze $etsy-listing-check: Prüfe in Safari nur den Artikel mit der von mir übergebenen Etsy-ID oder Artikel-URL; ohne ID prüfe alle aktiven Artikel und Entwürfe, ergänze fehlende bestätigte GPSR-, Werkzeug- und Herstellungsangaben und veröffentliche die Korrekturen an aktiven Artikeln. Entwürfe bleiben Entwürfe."

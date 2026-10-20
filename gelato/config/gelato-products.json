@@ -14,5 +14,12 @@
     "etsySection": "Kids T-Shirts",
     "etsyProductionProcessRequested": "Wird von Grund auf neu hergestellt",
     "colorMockupModel": "gildan-5000b"
+  },
+  "poster": {
+    "kind": "poster",
+    "templateIdEnv": "GELATO_TEMPLATE_POSTER",
+    "templateId": "c8f1c3d9-e4c1-44ce-b655-9fb8b8b1c818",
+    "placeholder": "auto",
+    "etsySection": "Poster"
   }
 }

@@ -43,13 +43,14 @@ export class GelatoApiClient {
   createFromTemplate(payload: GelatoPayload) { return this.request<GelatoProduct>(`/stores/${encodeURIComponent(this.storeId)}/products:create-from-template`, 'POST', payload); }
   getProduct(id: string) { return this.request<GelatoProduct>(`/stores/${encodeURIComponent(this.storeId)}/products/${encodeURIComponent(id)}`); }
 }
-export function buildGelatoPayload(template: GelatoTemplate, input: { title: string; description: string; tags: string[] }, artworkUrl: string, placeholder: string): GelatoPayload {
+export function buildGelatoPayload(template: GelatoTemplate, input: { title: string; description: string; tags: string[] }, artworkUrl: string, placeholder: string, variantArtwork?: (variant: GelatoTemplate['variants'][number]) => { url: string; placeholder: string }): GelatoPayload {
   if (!template.variants?.length) throw new Error('Gelato-Vorlage enthält keine Varianten.');
   const variants = template.variants.map(variant => {
     // Every editable layer must be accounted for; never silently publish old template artwork.
+    const chosen = variantArtwork?.(variant) ?? { url: artworkUrl, placeholder };
     const names = variant.imagePlaceholders?.map(p => p.name) ?? [];
-    if (!variant.id || names.length !== 1 || names[0] !== placeholder) throw new Error(`Variante ${variant.id}: genau ein Bildplatzhalter namens ${placeholder} erforderlich. Gefunden: ${names.length ? names.join(", ") : "keiner"}. config/gelato-products.json und Vorlage prüfen.`);
-    return { templateVariantId: variant.id, imagePlaceholders: [{ name: placeholder, fileUrl: artworkUrl, fitMethod: 'meet' as const }] };
+    if (!variant.id || names.length !== 1 || names[0] !== chosen.placeholder) throw new Error(`Variante ${variant.id}: genau ein Bildplatzhalter namens ${placeholder} erforderlich. Gefunden: ${names.length ? names.join(", ") : "keiner"}. config/gelato-products.json und Vorlage prüfen.`);
+    return { templateVariantId: variant.id, imagePlaceholders: [{ name: chosen.placeholder, fileUrl: chosen.url, fitMethod: 'meet' as const }] };
   });
   return { templateId: template.id, ...input, description: toGelatoHtml(input.description), isVisibleInTheOnlineStore: false, variants };
 }

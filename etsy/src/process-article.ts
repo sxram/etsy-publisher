@@ -27,7 +27,7 @@ async function stage(script: string, dir: string, listing: string, extra: string
  await run(script,"apply",["--dir",dir]);
 }
 async function main() {
- for(let i=0;i<args.length;i++) { if(!['--listing','--dir','--opacity','--text'].includes(args[i]))throw new Error(`Unknown option ${args[i]}`); arg(args[i]); i++; }
+ for(let i=0;i<args.length;i++) { if(!['--listing','--dir','--opacity','--text','--poster'].includes(args[i]))throw new Error(`Unknown option ${args[i]}`); arg(args[i]); i++; }
  const id=arg('--listing'); if(!id||!/^\d+$/.test(id)||!Number.isSafeInteger(Number(id))||Number(id)<=0)throw new Error('Provide --listing with a positive Etsy listing ID.');
  const opacity=Number(arg('--opacity')||process.env.WATERMARK_OPACITY||'0.14');
  const text=arg('--text')||process.env.WATERMARK_TEXT||'GigglingHome';validateStyle(text,opacity);
@@ -37,7 +37,17 @@ async function main() {
   const shop=await getMyShop(), listing=await getListing(Number(id));
   if(listing.shop_id!==shop.shop_id)throw new Error('Listing is not in your shop.');
   const sections=await etsyFetch<{results:Array<{title:string;shop_section_id:number}>}>(`/application/shops/${shop.shop_id}/sections`);
-  const section=sections.results.find(s=>s.shop_section_id===listing.shop_section_id)?.title.trim();
+  let section=sections.results.find(s=>s.shop_section_id===listing.shop_section_id)?.title.trim();
+  if (arg('--poster') === 'yes' && section !== 'Poster') {
+   if (listing.state !== 'draft' || (listing.type || listing.listing_type) !== 'physical') throw new Error('Poster-Abteilung nur bei physischem Entwurf automatisch zuordnen.');
+   const target=sections.results.find(s=>s.title.trim()==='Poster');
+   if(!target)throw new Error('Shop-Abteilung Poster fehlt.');
+   await writeFile(join(dir,'section-before.json'),JSON.stringify({listingId:Number(id),section:listing.shop_section_id,state:listing.state},null,2));
+   await etsyFetch(`/application/shops/${shop.shop_id}/listings/${id}`,{method:'PATCH',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({shop_section_id:String(target.shop_section_id)})});
+   const after=await getListing(Number(id));
+   if(after.shop_section_id!==target.shop_section_id||after.state!==listing.state)throw new Error('Poster-Abteilung konnte nicht bestätigt werden.');
+   section='Poster';
+  }
   if(!section||!['Poster','Poster-Digital','Coloring Books'].includes(section))throw new Error('Listing must be in Poster, Poster-Digital or Coloring Books.');
   const statePath=join(dir,'article.json');
   const state={listingId:Number(id),shopId:shop.shop_id,section,text,opacity};
