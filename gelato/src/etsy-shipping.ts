@@ -78,3 +78,25 @@ export async function ensureEtsyPosterMockups(listingId: string, folder: string,
   }
   await run({ executable: process.execPath, args: ['--import', pathToFileURL(loader).href, script, '--listing', listingId, '--dir', join(resolve(folder), 'out/etsy-poster'), '--poster', 'yes'], cwd, env }, 'Etsy-Poster-Nachbearbeitung');
 }
+
+export async function ensureEtsyDescription(listingId: string, folder: string, description: string, tags: string[], runner: ShippingRunner = run, options?: { section?: string; taxonomyId?: number; title?: string }) {
+  if (!/^[1-9]\d*$/.test(listingId)) throw new Error('Ungültige Etsy-ID.');
+  const helper = process.env.ETSY_SHIPPING_SCRIPT?.trim() || fileURLToPath(new URL('../../etsy/src/shipping-exclusions.ts', import.meta.url));
+  const cwd = dirname(dirname(resolve(helper))), script = join(cwd, 'src/product-description.ts');
+  await access(script);
+  const loader = createRequire(join(cwd, 'package.json')).resolve('tsx');
+  const env = { ...process.env };
+  for (const key of Object.keys(env)) if (key.startsWith('ETSY_') || key.startsWith('DOTENV_')) delete env[key];
+  env.DOTENV_CONFIG_PATH = join(cwd, '.env');
+  const descriptionFile = join(resolve(folder), 'out/gelato/etsy-description.txt');
+  const tagsFile = join(resolve(folder), 'out/gelato/etsy-tags.json');
+  await writeFile(descriptionFile, description);
+  await writeFile(tagsFile, JSON.stringify(tags));
+  const previousFile = join(resolve(folder), 'out/gelato/etsy-description-before-edit.txt');
+  const args = ['--import', pathToFileURL(loader).href, script, '--listing', listingId, '--description', descriptionFile, '--tags', tagsFile];
+  if (options?.title) args.push('--title', options.title);
+  if (options?.section) args.push('--section', options.section);
+  if (options?.taxonomyId) args.push('--taxonomy', String(options.taxonomyId));
+  try { await access(previousFile); args.push('--previous-description', previousFile); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+  await runner({ executable: process.execPath, args, cwd, env });
+}

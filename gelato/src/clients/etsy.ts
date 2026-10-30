@@ -96,7 +96,7 @@ export class EtsyApiClient {
     const after = z.object({ state: z.string(), taxonomy_id: z.number(), description: z.string(), shop_section_id: z.number().nullable().optional() }).parse(await read());
     if (sectionId && after.shop_section_id !== sectionId) throw new Error('Etsy-Shop-Abteilung konnte nicht bestätigt werden.');
     if (after.state !== 'draft' || after.taxonomy_id !== taxonomyId) throw new Error('Etsy-Korrektur konnte nicht bestätigt werden.');
-    if (description.includes('\n\n') && !after.description.includes('\n\n')) throw new Error('Etsy hat die Absatzabstände nicht übernommen.');
+    if (after.description !== description.replace(/\*\*([^*]+)\*\*/g, '$1')) throw new Error('Etsy hat die Absatzabstände nicht übernommen.');
     return { listingId, productionPartnerAssigned: partners.length === 1 };
   }
   async listDrafts(limit = 25, offset = 0) {

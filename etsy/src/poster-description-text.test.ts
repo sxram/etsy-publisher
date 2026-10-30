@@ -8,3 +8,17 @@ test('restore collapsed paragraphs and preserve GPSR without changing prose',()=
  assert.equal(restorePosterParagraphs(source,source),source);
  assert.throws(()=>restorePosterParagraphs('Manually changed.',source),/inhaltlich/);
 });
+
+test('explicit previous source permits authorized age removal, preserves all newlines and GPSR',()=>{
+ const old='Intro.\n\nDesigned with ages 4–10 in mind.\n\nDetails.\n- One\n- Two';
+ const target='Intro.\n\nDetails.\n- One\n- Two';
+ const suffix='GPSR — Manufacturer contact\nContact';
+ assert.equal(restorePosterParagraphs(old.replace(/\s+/g,' ')+'\n\n'+suffix,target,old),target+'\n\n'+suffix);
+ assert.throws(()=>restorePosterParagraphs('Different prose.',target,old),/inhaltlich/);
+ assert.equal(restorePosterParagraphs(target+'\n\n'+suffix,target),target+'\n\n'+suffix);
+});
+
+test('restore line breaks lost between adjacent bullet points',()=>{
+ const source='Intro.\n\n- Soft fabric\n- Durable seams';
+ assert.equal(restorePosterParagraphs('Intro. - Soft fabric- Durable seams',source),source);
+});

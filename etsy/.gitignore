@@ -14,7 +14,7 @@ digital/
 *.iml
 
 upload*/
-out/article-*/
+out/
 output/
 
 # Local Etsy shipping previews and backups

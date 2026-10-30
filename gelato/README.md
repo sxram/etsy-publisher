@@ -322,3 +322,17 @@ Weiße Shirts bleiben als separates ursprüngliches Mockup erhalten. Die Farbüb
 Die Vorlage wurde am 20. Oktober 2026 lesend geprüft: alle drei Größen vorhanden, aber je zwei Bildplatzhalter (`Image 3` und `whimsical_moonlit_village_canal_300dpi.png`). Vor Erstellung auf genau einen Motiv-Platzhalter je Variante reduzieren und speichern. Der Ablauf hält bis dahin vor Upload/Erstellung an.
 
 Poster-Beschreibungen werden nach fertiger Etsy-Übertragung direkt mit den ursprünglichen Leerzeilen korrigiert, auch bei `gelato:poster:resume`. Ein vorhandener GPSR-Block bleibt erhalten. Bei inhaltlich abweichendem Etsy-Text stoppt die Korrektur, um manuelle Änderungen zu schützen. Der Artikelstatus bleibt unverändert. Gelato erhält weiterhin HTML-Absätze; die nachträgliche Korrektur betrifft Etsy.
+
+
+### Beschreibung und Tags nach Etsy-Übertragung
+
+Der Create-/Resume-Ablauf korrigiert Beschreibung und Tags jetzt auch bei deaktiviertem optionalen Publisher-Etsy-Zugang über den separaten Etsy-Helper. Er liest den gespeicherten Text exakt zurück (einschließlich einzelner Zeilenumbrüche und Leerzeilen), prüft die Tags und erhält den Artikelstatus sowie vorhandenen GPSR-Kontakt. Fehlende Bestätigung bleibt als `descriptionCheck: pending` im Auftrag sichtbar. Inhaltlich abweichende Beschreibungen werden nicht überschrieben; eine ausdrücklich freigegebene vorherige Textfassung kann unter `out/gelato/etsy-description-before-edit.txt` für gezielte Korrekturen hinterlegt werden. Kategorie und Shop-Abteilung werden aus dem Produktprofil übernommen.
+
+Für die Punk-Motive englische Originalband- und Originalalbum-Tags in die jeweilige Quelldatei aufnehmen (weiterhin maximal 13 Tags mit je maximal 20 Zeichen). Keine Altersangabe in die Beschreibung aufnehmen; Größen über die Maßtabelle erklären.
+
+
+### Bestehenden Artikel aktualisieren
+
+`npm run product:update -- preview --dir NEUE_QUELLE --existing-dir ALTER_AUFTRAG` erstellt die lokale Vorschau. `prepare` sichert das bestehende Gelato-Produkt und lädt die neue Druckdatei hoch. Das geschützte Manifest unter `out/gelato/update/gelato-print-update.json` enthält den Link für Gelatos offiziellen CSV-Import. Die öffentliche Gelato-Ecommerce-API dokumentiert derzeit keinen Druckdatei-Update-Endpunkt; der Import und die Prüfung aller Varianten bleiben daher ausdrücklich offen. Es wird kein neues Produkt angelegt und kein alter Auftragsfingerprint verändert.
+
+`etsy-metadata` aktualisiert ausschließlich Titel, Beschreibung und Tags des gespeicherten Etsy-Artikels und liest sie exakt zurück. Aktueller Artikelstatus und GPSR-Kontakt bleiben erhalten. Druckdatei, Galerie und Gelato-Synchronisation werden dadurch NICHT geändert. Einen vollständigen Abschluss erst nach CSV-Import und aktualisierten Mockups melden.

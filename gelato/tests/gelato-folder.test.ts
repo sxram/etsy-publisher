@@ -6,8 +6,10 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { appendDescriptionDefaults, makeProfileTitle, parseProductText } from '../src/folder-input.js';
 import { buildGelatoPayload, completeEtsySizeGrid } from '../src/clients/gelato.js';
-import { runFolder } from '../src/gelato-folder.js';
+import { runFolder as runFolderActual } from '../src/gelato-folder.js';
 import { signStorageUrl } from '../src/artwork-storage.js';
+
+const runFolder: typeof runFolderActual = (args, shipping, manufacturer, mockups, descriptions = async () => {}) => runFolderActual(args, shipping, manufacturer, mockups, descriptions);
 
 const text = '**Title**\nMoon Fox, Woodland Art\n\n**Tags**\nfox shirt, woodland gift\n\n**Description**\nA whimsical fox design.';
 const template = { id: 't1', variants: [{ id: 'v1', imagePlaceholders: [{ name: 'artwork-prepared.png' }] }, { id: 'v2', imagePlaceholders: [{ name: 'artwork-prepared.png' }] }] };
