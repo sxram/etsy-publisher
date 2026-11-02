@@ -3,6 +3,7 @@ import { resolve, join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { GelatoApiClient } from './clients/gelato.js';
 import { readProductFolder, appendDescriptionDefaults, makeProfileTitle } from './folder-input.js';
+import { prepareProductMockups, type MockupProduct } from './shirt-mockup-selection.js';
 import { prepareArtwork } from './prepare-artwork.js';
 import { uploadArtwork } from './artwork-storage.js';
 import { ensureEtsyDescription } from './etsy-shipping.js';
@@ -14,7 +15,7 @@ export function updateTarget(state: {storeId:string;entries:{profile:string;prod
 }
 async function main() {
  const args=process.argv.slice(2), command=args[0];
- if(!['preview','prepare','etsy-metadata'].includes(command??''))throw new Error('Aufruf: product:update preview|prepare|etsy-metadata --dir QUELLE --existing-dir BESTEHENDER_AUFTRAG');
+ if(!['preview','prepare','etsy-metadata','mockup-preview'].includes(command??''))throw new Error('Aufruf: product:update preview|prepare|etsy-metadata|mockup-preview --dir QUELLE --existing-dir BESTEHENDER_AUFTRAG');
  const value=(key:string)=>{const i=args.indexOf(key);if(i<0||!args[i+1]||args[i+1]!.startsWith('--'))throw new Error(key+' fehlt.');return args[i+1]!;};
  const dir=resolve(value('--dir')), existing=resolve(value('--existing-dir'));
  const state=JSON.parse(await readFile(join(existing,'out/gelato/state.json'),'utf8'));
@@ -32,6 +33,7 @@ async function main() {
   if(command==='preview'){console.log(JSON.stringify(plan,null,2));return;}
   const client=new GelatoApiClient(process.env.GELATO_API_KEY?.trim()??'',storeId);const product=await client.getProduct(target.productId!);
   if(product.id!==target.productId||String(product.externalId)!==target.externalId)throw new Error('Gelato-/Etsy-Zuordnung geändert.');
+  if(command==='mockup-preview'){const images=await prepareProductMockups(product as unknown as MockupProduct,join(out,'mockup-preview'));console.log(`${images.length} fresh mockups prepared locally; review before replacing Etsy images. No Gelato or Etsy writes.`);return;}
   const backup=join(out,'gelato-before.json');try{await writeFile(backup,JSON.stringify(product,null,2),{flag:'wx',mode:0o600});}catch(error){if((error as NodeJS.ErrnoException).code!=='EEXIST')throw error;}
   if(command==='prepare'){
    const fileUrl=await uploadArtwork(prepared);

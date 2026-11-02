@@ -336,3 +336,10 @@ Für die Punk-Motive englische Originalband- und Originalalbum-Tags in die jewei
 `npm run product:update -- preview --dir NEUE_QUELLE --existing-dir ALTER_AUFTRAG` erstellt die lokale Vorschau. `prepare` sichert das bestehende Gelato-Produkt und lädt die neue Druckdatei hoch. Das geschützte Manifest unter `out/gelato/update/gelato-print-update.json` enthält den Link für Gelatos offiziellen CSV-Import. Die öffentliche Gelato-Ecommerce-API dokumentiert derzeit keinen Druckdatei-Update-Endpunkt; der Import und die Prüfung aller Varianten bleiben daher ausdrücklich offen. Es wird kein neues Produkt angelegt und kein alter Auftragsfingerprint verändert.
 
 `etsy-metadata` aktualisiert ausschließlich Titel, Beschreibung und Tags des gespeicherten Etsy-Artikels und liest sie exakt zurück. Aktueller Artikelstatus und GPSR-Kontakt bleiben erhalten. Druckdatei, Galerie und Gelato-Synchronisation werden dadurch NICHT geändert. Einen vollständigen Abschluss erst nach CSV-Import und aktualisierten Mockups melden.
+
+### Mockups nach einer Formatänderung erneuern
+
+`npm run product:update -- mockup-preview --dir AKTUELLES_MOTIV --existing-dir BESTEHENDER_AUFTRAG`
+liest das bestehende Gelato-Produkt und sichert je Farbe die zuletzt **erzeugte** Bildfassung unter `out/gelato/update/mockup-preview/`. Es verändert weder Gelato noch Etsy. `createdAt` entscheidet über die Generation: Ein späteres `updatedAt` kann nur die erneute Veröffentlichung eines alten, beschnittenen Bildes bedeuten. Die Bildauswahl ist unabhängig von der Reihenfolge der API-Antwort. Unzugeordnete Galeriebilder werden nicht als Farbquelle verwendet. Der Bericht enthält Prüfsummen und muss vor dem Austausch visuell geprüft werden.
+
+Der lokale Rohling-Renderer verwendet weiterhin proportionales Einpassen (`inside`); der Regressionstest prüft ausdrücklich den Erhalt des oberen und unteren Motivrandes beim Hochformat in einer quadratischen Druckfläche.

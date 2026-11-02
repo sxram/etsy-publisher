@@ -39,7 +39,8 @@
     "shipping:exclude": "tsx src/shipping-exclusions.ts",
     "test:shipping": "node --import tsx --test src/shipping-exclusions.test.ts",
     "gpsr:manufacturer": "tsx src/gpsr-manufacturer.ts",
-    "mockups:upload": "tsx src/color-mockup-upload.ts"
+    "mockups:upload": "tsx src/color-mockup-upload.ts",
+    "shirt-mockups:refresh": "tsx src/shirt-mockup-refresh.ts"
   },
   "dependencies": {
     "dotenv": "^16.6.1",

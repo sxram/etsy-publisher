@@ -927,3 +927,10 @@ npm run gpsr:manufacturer -- --listing 4597600781 --contact /Users/stefan.marx/D
 ```
 
 Ohne `--apply` nur Vorschau. Mit `--apply` wird nach Shop-/Produktionspartnerprüfung ausschließlich die Beschreibung ergänzt und ein Backup unter `out/gpsr` angelegt. Kein Publish, keine erfundenen Sicherheitsangaben. Der Gelato-Publisher ruft dies bei create/resume nach fertiger Etsy-Übertragung automatisch auf.
+
+### Einzelne Shirt-Mockups ersetzen
+
+`node --env-file=.env --import tsx src/shirt-mockup-refresh.ts --plan /ABSOLUTER/PFAD/replacement-plan.json`
+zeigt den vorbereiteten Austauschplan. `--apply --reviewed` führt ausschließlich den visuell geprüften Plan aus. Ein Plan enthält Artikel-/Shop-ID, ursprünglichen Artikelstatus, die gesicherten Galerie-IDs, Farb-Bild-Verknüpfungen und pro Bild die Aktion `keep`, `replace` oder `remove-duplicate` sowie Datei und SHA256. Daneben muss `listing-before.json` liegen.
+
+Die Ersetzung erfolgt am bestehenden Bildrang. Bereits richtige Bilder bleiben erhalten. Der Ablauf protokolliert jede Schreiboperation, prüft Galerie und Artikelmetadaten und stellt die logischen Farbzuordnungen mit den neuen Bild-IDs wieder her. Historische Mehrfachverknüpfungen derselben Farbe werden dabei auf eine Verknüpfung je Farbwert zusammengeführt, wie von der Etsy-API verlangt. Bei ungewissem Schreibausgang wird angehalten statt blind erneut hochzuladen. Vorherige Bilder und Zuordnungen separat sichern; Etsy-Bilder bleiben laut API nach Entfernen serverseitig wieder zuordenbar.
